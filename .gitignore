@@ -1,25 +1,8 @@
-# Entornos virtuales
-venv/
-env/
-ENV/
-.env
-
-# Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-
-# IDE
-.vscode/
+.env
+venv/
 .idea/
-
-# Archivos locales
+.vscode/
 *.log
-.DS_Store
-
-# Azure
-bin/
-obj/
 deploy.zip
