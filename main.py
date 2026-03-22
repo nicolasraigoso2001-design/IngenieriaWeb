@@ -64,6 +64,11 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+class TourCreate(BaseModel):
+    nombre: str
+    ciudad: str
+    precio: float
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -175,6 +180,20 @@ def listar_transportes():
 @app.get("/reservas", dependencies=[Depends(get_current_user)])
 def listar_reservas():
     return reservas
+
+@app.post("/tours/create", dependencies=[Depends(get_current_user)])
+def crear_tour(tour: TourCreate):
+    new_id = len(tours) + 1
+
+    nuevo = {
+        "id": new_id,
+        "nombre": tour.nombre,
+        "ciudad": tour.ciudad,
+        "precio": tour.precio
+    }
+
+    tours.append(nuevo)
+    return {"mensaje": "Tour creado", "data": nuevo}
 
 
 
