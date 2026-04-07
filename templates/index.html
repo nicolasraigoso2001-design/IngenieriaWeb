@@ -148,18 +148,14 @@ footer{
 <div id="app">
 
 <header>
-
 <h1>🌎 Turismo Raigoso</h1>
 <p>Explora los mejores destinos turísticos</p>
-
 </header>
 
 <nav>
-
 <button onclick="cargarTours()">🌍 Tours</button>
 <button onclick="cargarClientes()">👥 Clientes</button>
 <button onclick="cargarReservas()">📅 Reservas</button>
-
 </nav>
 
 <section>
@@ -167,15 +163,13 @@ footer{
 <h2 id="titulo">Bienvenido</h2>
 
 <div id="contenedor">
-<p>Selecciona una opción para comenzar a explorar nuestros sitioss.</p>
+<p>Selecciona una opción para comenzar a explorar nuestros sitios.</p>
 </div>
 
 </section>
 
 <footer>
-
 <p>Gracias por visitarnos ☁️</p>
-
 </footer>
 
 </div>
@@ -184,26 +178,41 @@ footer{
 
 <script>
 
-function login(){
+// TOKEN GLOBAL
+let token = "";
 
-let user = document.getElementById("usuario").value;
-let pass = document.getElementById("password").value;
+// LOGIN REAL (FastAPI)
+async function login(){
 
-if(user === "admin" && pass === "123"){
+    let user = document.getElementById("usuario").value;
+    let pass = document.getElementById("password").value;
 
-document.getElementById("login").style.display = "none";
-document.getElementById("app").style.display = "block";
+    const form = new URLSearchParams();
+    form.append("username", user);
+    form.append("password", pass);
 
-}else{
+    const res = await fetch("/token", {
+        method: "POST",
+        body: form
+    });
 
-alert("Usuario o contraseña incorrectos");
+    const data = await res.json();
 
-}
+    if(data.access_token){
 
+        token = data.access_token;
+
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app").style.display = "block";
+
+        cargarTours();
+
+    }else{
+        alert("Credenciales incorrectas");
+    }
 }
 
 </script>
 
 </body>
-
 </html>
