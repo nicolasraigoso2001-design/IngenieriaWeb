@@ -9,6 +9,9 @@ from datetime import datetime, timedelta
 from typing import Optional
 from fastapi import Query
 from fastapi.middleware.cors import CORSMiddleware 
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path 
 
 
 # ------------------- CONFIG -------------------
@@ -20,20 +23,15 @@ app = FastAPI(
     title="Tourism Management API",
     description="API para gestión de tours, clientes, guías, transportes y reservas"
 )
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # permite frontend
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # Frontend
 
-@app.get("/")
-def root():
-    return {"mensaje": "API funcionando 🚀"}
+@app.get("/", response_class=HTMLResponse)
+def home():
+    html = Path("templates/index.html").read_text(encoding="utf-8")
+    return HTMLResponse(content=html)
     
 
 # ------------------- MODELOS -------------------
