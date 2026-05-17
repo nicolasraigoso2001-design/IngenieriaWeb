@@ -27,12 +27,22 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # Frontend
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+
+app.mount(
+    "/static",
+    StaticFiles(directory=BASE_DIR / "static"),
+    name="static"
+)
 
 @app.get("/", response_class=HTMLResponse)
 def home():
-    html = Path("templates/index.html").read_text(encoding="utf-8")
+    html = (BASE_DIR / "templates" / "index.html").read_text(encoding="utf-8")
     return HTMLResponse(content=html)
-    
 
 # ------------------- MODELOS -------------------
 class Tour(BaseModel):
