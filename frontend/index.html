@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Turismo Raigoso</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+
+    background-image: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470"); /* montaña caminata */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* 🔥 efecto pro */
+
+    color:white;
+}
+
+
+
+/* Ccapa principal pagina*/
+body::before{
+    content:"";
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.2),   /* 🔥 más claro */
+        rgba(0, 150, 100, 0.2)
+    );
+
+    z-index:-1;
+}
+
+/* CONTENEDOR GENERAL */
+#login{
+    display:flex;
+    height:100vh;
+}
+
+/* LADO IZQUIERDO */
+.login-left{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:80px;
+
+    background: linear-gradient(
+        rgba(0, 50, 40, 0.7),
+        rgba(0, 0, 0, 0.6)
+    );
+}
+
+.login-left h1{
+    font-size:55px;
+    color:#a8e6cf;
+}
+
+.descripcion{
+    font-size:18px;
+    max-width:420px;
+    line-height:1.6;
+    color:#e0f7fa;
+}
+
+/* LADO DERECHO */
+.login-right{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* CAJA LOGIN */
+.login-box{
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    padding:40px;
+    border-radius:15px;
+    width:320px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,0.2);
+}
+
+/* INPUTS */
+.login-box input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:none;
+    border-radius:5px;
+}
+
+.link{
+    margin-top:10px;
+    cursor:pointer;
+    font-size:14px;
+    color:#a8e6cf;
+    transition:0.3s;
+}
+
+.link:hover{
+    color:white;
+    text-decoration: underline;
+}
+
+/* BOTONES */
+.login-box button,
+nav button{
+    background: linear-gradient(135deg, #2E8B57, #1E90FF);
+    border:none;
+    color:white;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.login-box{
+    background: rgba(255,255,255,0.08); /* más transparente */
+    backdrop-filter: blur(15px); /* efecto vidrio */
+    padding:50px 40px;
+    border-radius:20px;
+    width:340px;
+    text-align:center;
+    
+
+    border:1px solid rgba(255,255,255,0.2);
+}
+
+.login-box{
+    background: rgba(0, 0, 0, 0.75); /* 🔥 oscuro elegante */
+    backdrop-filter: blur(10px);
+
+    padding:50px 40px;
+    border-radius:20px;
+    width:340px;
+    text-align:center;
+
+    border:1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+
+
+.login-box button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+
+    background: linear-gradient(135deg, #00b4d8, #0077b6);
+    border:none;
+    border-radius:10px;
+
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.login-box button:hover{
+    transform:scale(1.05);
+}
+
+.login-box button:hover{
+    background: rgba(0,119,182,0.9);
+}
+
+
+.login-box hr{
+    margin:20px 0;
+    opacity:0.3;
+}
+
+/* SOCIAL LOGIN */
+.social-login{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:10px;
+}
+
+.social-login button{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+
+    padding:6px 10px; /* 🔥 MÁS PEQUEÑO */
+    font-size:13px;
+
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.3);
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.social-login button:hover{
+    background: rgba(255,255,255,0.25);
+}
+
+.social-login button:hover{
+    background: rgba(255,255,255,0.2);
+    transform:scale(1.05);
+}
+
+/* GOOGLE */
+.google{
+    background:white;
+    color:black;
+}
+
+/* MICROSOFT */
+.microsoft{
+    background:#2F2F2F;
+    color:white;
+}
+
+/* ICONOS */
+.social-login img{
+    width:17px;
+}
+
+/* LOGIN */
+
+#login{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.login-box{
+    background: rgba(255, 255, 255, 0.12); /* 🔥 blanco MUY suave */
+    backdrop-filter: blur(18px); /* efecto vidrio */
+
+    padding:50px 40px;
+    border-radius:20px;
+    width:340px;
+    text-align:center;
+
+    border:1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.login-box input{
+    width:100%;
+    padding:12px;
+    margin:12px 0;
+
+    border:none;
+    border-radius:8px;
+
+    background: rgba(255,255,255,0.2);
+    color:white;
+}
+
+.login-box input::placeholder{
+    color: rgba(255,255,255,0.7);
+}
+
+.login-box button{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    background:#00b4d8;
+    border:none;
+    border-radius:5px;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.login-box button:hover{
+    background:#0077b6;
+}
+
+
+
+
+/* LOGIN CON FONDO PROPIO */
+#login{
+    display:flex;
+    height:100vh;
+
+    background-image: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* CAPA OSCURA ENCIMA DE LA IMAGEN */
+#login::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+
+   background: linear-gradient(
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 80, 60, 0.3)
+
+    );
+
+    z-index:0;
+}
+
+
+nav{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
+
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
+}
+
+header{
+    text-align:center;
+    padding:40px;
+
+    background: rgba(0,0,0,0.4); /* menos oscuro */
+    backdrop-filter: blur(5px);
+}
+
+
+
+/* ASEGURAR QUE EL CONTENIDO QUEDE ENCIMA */
+.login-left,
+.login-right{
+    position: relative;
+    z-index: 1;
+}
+
+/* APP ---------------------------------------------*/
+
+
+#contenedor{
+    margin-top:20px;
+
+    background: rgba(255, 255, 255, 0.15); /* 🔥 blanco translúcido */
+    backdrop-filter: blur(15px);
+
+    padding:30px;
+    border-radius:20px;
+
+    width:80%;
+    margin-left:auto;
+    margin-right:auto;
+
+    border:1px solid rgba(255,255,255,0.3);
+}
+
+/* GRID DE TOURS */
+#contenedor{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:25px;
+
+    margin-top:25px;
+
+    background: transparent; /* 🔥 SIN FONDO */
+    backdrop-filter: none;   /* 🔥 SIN BLUR */
+
+    padding:10px;
+
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
+.card{
+    background: white;
+    border-radius:20px;
+    overflow:hidden;
+    padding:0; /* 🔥 CLAVE */
+
+}
+
+
+
+.card:hover{
+    transform: scale(1.05);
+}
+
+.card:hover{
+    transform: scale(1.05);
+}
+
+.card:hover{
+    transform: scale(1.05);
+}
+
+
+/* IMAGEN TOUR*/
+.card img{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+}
+
+/* CONTENIDO */
+
+.card-body{
+    background: white; /* 🔥 fondo blanco */
+    padding:12px;
+    text-align:left;
+}
+
+.card-body h3{
+    color:#333; /* 🔥 texto oscuro */
+    font-size:16px;
+    margin:5px 0;
+}
+
+.card-body p{
+    color:#666;
+    font-size:13px;
+}
+
+.card-body strong{
+    color:#000;
+    font-size:14px;
+}
+
+.card-body{
+    padding:12px;
+}
+
+.card-body h3{
+    font-size:16px;
+    margin:5px 0;
+}
+
+.card-body p{
+    font-size:13px;
+    margin:3px 0;
+}
+
+.card-body strong{
+    font-size:14px;
+}
+
+.btn{
+    margin-top:10px;
+    padding:6px 10px;
+    font-size:14px;
+    border:none;
+    border-radius:8px;
+    background:#2E8B57;
+    color:white;
+    cursor:pointer;
+}
+
+
+
+
+
+header{
+    text-align:center;
+    padding:40px;
+    background: rgba(0,0,0,0.5);
+    position:relative;
+}
+
+nav{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
+    background: rgba(0,0,0,0.6);
+}
+
+nav button{
+    padding:12px 25px;
+    border:none;
+    border-radius:8px;
+    background:#00b4d8;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+nav button:hover{
+    background:#0077b6;
+    transform:scale(1.05);
+}
+
+section{
+    text-align:center;
+    padding:40px;
+}
+
+
+
+footer{
+    text-align:center;
+    padding:20px;
+    background: rgba(0,0,0,0.7);
+    position:fixed;
+    bottom:0;
+    width:100%;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="login">
+
+    <!-- LADO IZQUIERDO -->
+    <div class="login-left">
+        <h1>🌎 Turismo Raigoso</h1>
+
+        <p class="descripcion">
+            Explora el mundo disfrutando de los mejores lugares de Colombia,
+            vive experiencias únicas y descubre nuevas aventuras en cada destino.
+        </p>
+    </div>
+
+    <!-- LADO DERECHO -->
+    <div class="login-right">
+
+        <div class="login-box">
+
+            <h3>Iniciar sesión</h3>
+
+            <input type="text" id="usuario" placeholder="Usuario">
+            <input type="password" id="password" placeholder="Contraseña">
+
+            <button onclick="login()">Ingresar</button>
+
+            <hr>
+
+            <p>O continúa con:</p>
+
+            <div class="social-login">
+
+                <button onclick="alert('Google próximamente')" class="google">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
+                    Google
+                </button>
+
+                <button onclick="alert('Microsoft próximamente')" class="microsoft">
+                    <img src="https://cdn-icons-png.flaticon.com/512/732/732221.png">
+                    Microsoft
+                </button>
+
+            </div>
+
+            <hr>
+
+            <p class="link" onclick="mostrarRegistro()">Crear cuenta</p>
+            <p class="link" onclick="olvidarPassword()">¿Olvidaste tu contraseña?</p>
+
+
+            
+        </div>
+
+    </div>
+
+</div>
+
+<!-- APP -->
+
+
+<!-- DETALLE DE TOUR -->
+<div id="tour-detalle" style="display:none;">
+    <div class="detalle-card">
+
+        <button onclick="cerrarDetalle()" class="btn-cerrar">✖</button>
+
+        <img id="detalle-img" src="" />
+
+        <h2 id="detalle-nombre"></h2>
+        <p id="detalle-ciudad"></p>
+        <h3 id="detalle-precio"></h3>
+
+        <p id="detalle-info">
+            Explora este destino turístico con experiencias únicas, cultura y naturaleza.
+        </p>
+
+        <button class="btn" onclick="agregarFavoritoDetalle()">❤️ Favorito</button>
+
+    </div>
+</div>
+
+
+
+<div id="app">
+
+<header>
+    <h1>🌎 Turismo Raigoso</h1>
+    <p>Explora los mejores destinos turísticos</p>
+
+    <!-- USUARIO -->
+    <div style="
+        position:absolute;
+        top:20px;
+        right:30px;
+        background: rgba(0,0,0,0.5);
+        padding:8px 12px;
+        border-radius:8px;
+        font-size:14px;
+    ">
+        👤 <span id="username-display">Usuario</span>
+    </div>
+</header>
+
+<nav>
+    <button onclick="cargarTours()">🌍 Tours</button>
+    <button onclick="cargarClientes()">👥 Clientes</button>
+    <button onclick="cargarReservas()">📅 Reservas</button>
+    <button onclick="cargarFavoritos()">⭐ Favoritos</button>
+    <button onclick="verPerfil()">👤 Perfil</button>
+    <button onclick="logout()">🚪 Cerrar sesión</button>
+</nav>
+
+<section>
+
+<h2 id="titulo">Bienvenido</h2>
+
+<div id="contenedor">
+<p>Selecciona una opción para comenzar a explorar nuestros sitios.</p>
+</div>
+
+</section>
+
+<footer>
+<p>Gracias por visitarnos ☁️</p>
+</footer>
+
+</div>
+
+<!-- IMPORTANTE: SOLO app.js -->
+<script src="app.js"></script>
+
+</body>
+</html>
+

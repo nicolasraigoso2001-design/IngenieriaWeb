@@ -8,3 +8,9 @@ python-multipart
 python-jose
 jinja2
 python-jose[cryptography]
+fastapi
+uvicorn
+python-jose
+python-multipart
+python-dotenv
+pydantic

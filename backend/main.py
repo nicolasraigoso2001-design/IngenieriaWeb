@@ -1,14 +1,15 @@
 from fastapi import FastAPI, HTTPException, Depends
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
-from pathlib import Path
+
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
 from fastapi import Query
+from fastapi.middleware.cors import CORSMiddleware 
+
 
 # ------------------- CONFIG -------------------
 SECRET_KEY = "supersecret123"
@@ -19,14 +20,21 @@ app = FastAPI(
     title="Tourism Management API",
     description="API para gestión de tours, clientes, guías, transportes y reservas"
 )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # permite frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Frontend
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.get("/", response_class=HTMLResponse)
-def home():
-    html_file = Path("templates/index.html").read_text()
-    return HTMLResponse(content=html_file)
+@app.get("/")
+def root():
+    return {"mensaje": "API funcionando 🚀"}
+    
 
 # ------------------- MODELOS -------------------
 class Tour(BaseModel):
@@ -63,11 +71,6 @@ class Usuario(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
-
-class TourCreate(BaseModel):
-    nombre: str
-    ciudad: str
-    precio: float
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -180,20 +183,6 @@ def listar_transportes():
 @app.get("/reservas", dependencies=[Depends(get_current_user)])
 def listar_reservas():
     return reservas
-
-@app.post("/tours/create", dependencies=[Depends(get_current_user)])
-def crear_tour(tour: TourCreate):
-    new_id = len(tours) + 1
-
-    nuevo = {
-        "id": new_id,
-        "nombre": tour.nombre,
-        "ciudad": tour.ciudad,
-        "precio": tour.precio
-    }
-
-    tours.append(nuevo)
-    return {"mensaje": "Tour creado", "data": nuevo}
 
 
 
