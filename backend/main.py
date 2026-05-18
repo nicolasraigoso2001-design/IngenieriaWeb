@@ -1,17 +1,15 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List
-
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt
-from datetime import datetime, timedelta
-from typing import Optional
-from fastapi import Query
-from fastapi.middleware.cors import CORSMiddleware 
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from pathlib import Path 
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
+from pydantic import BaseModel
+from jose import JWTError, jwt
+
+from typing import List, Optional
+from datetime import datetime, timedelta
+from pathlib import Path
 
 
 # ------------------- CONFIG -------------------
@@ -23,13 +21,6 @@ app = FastAPI(
     title="Tourism Management API",
     description="API para gestión de tours, clientes, guías, transportes y reservas"
 )
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
-# Frontend
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
