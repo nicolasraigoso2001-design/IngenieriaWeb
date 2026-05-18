@@ -9,6 +9,10 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,12 +24,18 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./backend
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4BCCCFBCEDAA46FDB23D15B8DB2DA3CA }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B3D9F7A2D3034F27B1CCC3932F5D9DC2 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F96B5D4507694485B355B2755AE1D989 }}
 
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: "nicolasapp"
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./backend
-          
