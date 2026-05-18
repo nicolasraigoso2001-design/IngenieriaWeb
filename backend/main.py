@@ -18,6 +18,12 @@ from patterns.observer.reservation_observer import (
     LogObserver
 )
 
+from patterns.strategy.auth_context import AuthContext
+
+from patterns.strategy.local_auth import (
+    LocalAuthStrategy
+)
+
 # ------------------- CONFIG -------------------
 config = AppConfig()
 
@@ -143,11 +149,19 @@ reservation_subject.attach(
 # ------------------- FUNCIONES AUXILIARES -------------------
 
 # ------------------- FUNCIONES AUXILIARES -------------------
-def authenticate_user(username: str, password: str):
-    for user in usuarios:
-        if user["username"] == username and user["password"] == password:
-            return user
-    return False
+auth_context = AuthContext(
+    LocalAuthStrategy(usuarios)
+)
+
+def authenticate_user(
+    username: str,
+    password: str
+):
+
+    return auth_context.authenticate(
+        username,
+        password
+    )
 
 def create_access_token(
     data: dict,
