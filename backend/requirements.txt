@@ -5,12 +5,7 @@ pydantic
 python-dotenv
 httpx
 python-multipart
-python-jose
-jinja2
 python-jose[cryptography]
-fastapi
-uvicorn
-python-jose
-python-multipart
-python-dotenv
-pydantic
+jinja2
+pymysql
+sqlalchemy
