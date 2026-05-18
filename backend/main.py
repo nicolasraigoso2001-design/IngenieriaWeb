@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from patterns.singleton.app_config import AppConfig
 
 from pydantic import BaseModel
 from jose import JWTError, jwt
@@ -13,13 +14,22 @@ from pathlib import Path
 
 
 # ------------------- CONFIG -------------------
-SECRET_KEY = "supersecret123"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+config = AppConfig()
+
+
 
 app = FastAPI(
-    title="Tourism Management API",
+    title=config.API_NAME,
+    version=config.VERSION,
     description="API para gestión de tours, clientes, guías, transportes y reservas"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -116,29 +126,62 @@ def authenticate_user(username: str, password: str):
             return user
     return False
 
-def create_access_token(data: dict, expires_delta: timedelta = None):
+def create_access_token(
+    data: dict,
+    expires_delta: timedelta = None
+):
+
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+
+    expire = datetime.utcnow() + (
+        expires_delta or timedelta(
+            minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES
+        )
+    )
+
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+    encoded_jwt = jwt.encode(
+        to_encode,
+        config.SECRET_KEY,
+        algorithm=config.ALGORITHM
+    )
+
     return encoded_jwt
 
+
 async def get_current_user(token: str = Depends(oauth2_scheme)):
+
     credentials_exception = HTTPException(
         status_code=401,
         detail="No se pudo validar las credenciales",
         headers={"WWW-Authenticate": "Bearer"},
     )
+
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+
+        payload = jwt.decode(
+            token,
+            config.SECRET_KEY,
+            algorithms=[config.ALGORITHM]
+        )
+
         username: str = payload.get("sub")
+
         if username is None:
             raise credentials_exception
+
     except JWTError:
         raise credentials_exception
-    user = next((u for u in usuarios if u["username"] == username), None)
+
+    user = next(
+        (u for u in usuarios if u["username"] == username),
+        None
+    )
+
     if user is None:
         raise credentials_exception
+
     return user
 
 

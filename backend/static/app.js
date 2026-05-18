@@ -3,9 +3,7 @@ let token = "";
 let favoritos = [];
 
 
-     
-
-
+    
 
 // LOGOUT
 
