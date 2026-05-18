@@ -17,12 +17,13 @@ from patterns.observer.reservation_observer import (
     EmailNotificationObserver,
     LogObserver
 )
-
+from patterns.adapter.image_adapter import ImageAdapter
 from patterns.strategy.auth_context import AuthContext
 
 from patterns.strategy.local_auth import (
     LocalAuthStrategy
 )
+from patterns.decorator.log_decorator import log_action 
 
 # ------------------- CONFIG -------------------
 config = AppConfig()
@@ -237,30 +238,59 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/tours", dependencies=[Depends(get_current_user)])
-def listar_tours():
-    return tours
 
-@app.get("/tours/{tour_id}/transportes", dependencies=[Depends(get_current_user)])
-def transportes_por_tour(tour_id: int):
-    resultado = [t for t in transportes if t["tour_id"] == tour_id]
+@app.get("/tours", dependencies=[Depends(get_current_user)])
+@log_action
+async def listar_tours():
+
+    resultado = []
+
+    for tour in tours:
+
+        imagen = image_adapter.obtener_imagen_tour(
+            tour["ciudad"]
+        )
+
+        nuevo_tour = {
+            **tour,
+            **imagen
+        }
+
+        resultado.append(nuevo_tour)
+
     return resultado
 
-@app.get("/clientes", dependencies=[Depends(get_current_user)])
-def listar_clientes():
-    return clientes
 
-@app.get("/guias", dependencies=[Depends(get_current_user)])
-def listar_guias():
-    return guias
+@app.get("/tours/{tour_id}/transportes", dependencies=[Depends(get_current_user)])
+@log_action
+async def transportes_por_tour(tour_id: int):
 
-@app.get("/transportes", dependencies=[Depends(get_current_user)])
-def listar_transportes():
-    return transportes
+    resultado = [
+        t for t in transportes
+        if t["tour_id"] == tour_id
+    ]
+
+    return resultado
+
 
 @app.get("/reservas", dependencies=[Depends(get_current_user)])
-def listar_reservas():
+@log_action
+async def listar_reservas():
     return reservas
+
+
+@app.get("/guias", dependencies=[Depends(get_current_user)])
+@log_action
+async def listar_guias():
+    return guias
+
+
+@app.get("/transportes", dependencies=[Depends(get_current_user)])
+@log_action
+async def listar_transportes():
+    return transportes
+
+
 
 
 
@@ -270,9 +300,26 @@ def listar_reservas():
 
 # 1. POST → Crear tour (usa tu modelo existente)
 @app.post("/tours/create", dependencies=[Depends(get_current_user)])
-def crear_tour(tour: Tour):
+@log_action
+async def crear_tour(tour: Tour):
+
     tours.append(tour.dict())
-    return {"mensaje": "Tour creado", "data": tour}
+
+    return {
+        "mensaje": "Tour creado",
+        "data": tour
+    }
+
+@app.post("/tours/create", dependencies=[Depends(get_current_user)])
+@log_action
+async def crear_tour(tour: Tour):
+
+    tours.append(tour.dict())
+
+    return {
+        "mensaje": "Tour creado",
+        "data": tour
+    }
 
 
 # 2. GET por ID → con error 404

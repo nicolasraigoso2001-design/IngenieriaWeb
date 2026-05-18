@@ -125,7 +125,7 @@ function pintarTours(data){
     data.forEach(t => {
         container.innerHTML += `
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+            <img src="${t.imagen}">
             <div class="card-body">
                 <h3>${t.nombre}</h3>
                 <p>${t.ciudad}</p>
