@@ -44,6 +44,7 @@ def home():
     html = (BASE_DIR / "templates" / "index.html").read_text(encoding="utf-8")
     return HTMLResponse(content=html)
 
+
 # ------------------- MODELOS -------------------
 class Tour(BaseModel):
     id: int
