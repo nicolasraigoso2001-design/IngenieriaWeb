@@ -11,7 +11,12 @@ from jose import JWTError, jwt
 from typing import List, Optional
 from datetime import datetime, timedelta
 from pathlib import Path
+from patterns.observer.subject import Subject
 
+from patterns.observer.reservation_observer import (
+    EmailNotificationObserver,
+    LogObserver
+)
 
 # ------------------- CONFIG -------------------
 config = AppConfig()
@@ -118,6 +123,24 @@ reservas = [
     {"id": 1, "cliente_id": 1, "tour_id": 3},
     {"id": 2, "cliente_id": 2, "tour_id": 1},
 ]
+
+
+# =========================
+# OBSERVER
+# =========================
+
+reservation_subject = Subject()
+
+reservation_subject.attach(
+    EmailNotificationObserver()
+)
+
+reservation_subject.attach(
+    LogObserver()
+)
+
+
+# ------------------- FUNCIONES AUXILIARES -------------------
 
 # ------------------- FUNCIONES AUXILIARES -------------------
 def authenticate_user(username: str, password: str):
@@ -262,3 +285,18 @@ def buscar_tours(
         resultado = [t for t in resultado if t["precio"] <= precio_max]
 
     return resultado
+
+@app.post("/reservas")
+def crear_reserva(reserva: Reserva):
+
+    nueva_reserva = reserva.dict()
+
+    reservas.append(nueva_reserva)
+
+    # OBSERVER
+    reservation_subject.notify(nueva_reserva)
+
+    return {
+        "mensaje": "Reserva creada",
+        "data": nueva_reserva
+    }
