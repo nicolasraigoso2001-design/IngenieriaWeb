@@ -3,11 +3,39 @@ from database.connection import Base
 
 
 class UsuarioDB(Base):
+
     __tablename__ = "usuarios"
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True)
-    password = Column(String)
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
+
+    nombres = Column(
+        String,
+        nullable=False
+    )
+
+    apellidos = Column(
+        String,
+        nullable=False
+    )
+
+    correo = Column(
+        String,
+        unique=True,
+        nullable=False
+    )
+
+    telefono = Column(
+        String
+    )
+
+    password = Column(
+        String,
+        nullable=False
+    )
 
 
 class TourDB(Base):

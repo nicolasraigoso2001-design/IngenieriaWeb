@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from patterns.singleton.app_config import AppConfig
 from pydantic import BaseModel, Field, EmailStr, validator
 from jose import JWTError, jwt
-
+from fastapi import Request
 
 from database.connection import engine, Base
 Base.metadata.create_all(bind=engine)
@@ -120,8 +120,16 @@ class Reserva(BaseModel):
     tour_id: int = Field(..., gt=0)
 
 class Usuario(BaseModel):
-    username: str = Field(..., min_length=3, max_length=50)
-    password: str = Field(..., min_length=6, max_length=100)
+
+    nombres: str
+
+    apellidos: str
+
+    correo: str
+
+    telefono: str | None = None
+
+    password: str
 
 class Token(BaseModel):
     access_token: str
@@ -144,12 +152,16 @@ image_adapter = ImageAdapter()
 # ------------------- FUNCIONES AUXILIARES -------------------
 
 def authenticate_user(username: str, password: str):
+
     db = SessionLocal()
+
     user = db.query(UsuarioDB).filter(
-        UsuarioDB.username == username,
+        UsuarioDB.correo == username,
         UsuarioDB.password == password
     ).first()
+
     db.close()
+
     return user
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
@@ -176,7 +188,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
 
     db = SessionLocal()
-    user = db.query(UsuarioDB).filter(UsuarioDB.username == username).first()
+    user = db.query(UsuarioDB).filter(UsuarioDB.correo == username).first()
     db.close()
 
     if user is None:
@@ -186,28 +198,55 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 # ------------------- AUTH -------------------
 
-@app.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
-    if not user:
-        raise HTTPException(status_code=401, detail="Usuario o contraseña incorrectos")
-    access_token = create_access_token(data={"sub": user.username})
-    return {"access_token": access_token, "token_type": "bearer"}
 
+@app.post("/token")
 
-@app.post("/register", status_code=201)
-async def registrar_usuario(usuario: Usuario):
+async def login(
+    form_data: OAuth2PasswordRequestForm = Depends()
+):
+
     db = SessionLocal()
-    existente = db.query(UsuarioDB).filter(UsuarioDB.username == usuario.username).first()
-    if existente:
-        db.close()
-        raise HTTPException(status_code=400, detail="El usuario ya existe")
-    nuevo = UsuarioDB(username=usuario.username, password=usuario.password)
-    db.add(nuevo)
-    db.commit()
-    db.refresh(nuevo)
-    db.close()
-    return {"mensaje": "Usuario registrado correctamente", "username": nuevo.username}
+
+    user = db.query(
+        UsuarioDB
+    ).filter(
+
+        UsuarioDB.correo == form_data.username
+
+    ).first()
+
+    if not user:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Usuario incorrecto"
+        )
+
+    if user.password != form_data.password:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Contraseña incorrecta"
+        )
+
+    access_token = create_access_token(
+
+        data={
+            "sub": user.correo
+        }
+    )
+
+    return {
+
+        "access_token": access_token,
+
+        "token_type":"bearer",
+
+        "nombres": user.nombres
+    }
+
+
+
 
 
 @app.get("/perfil", dependencies=[Depends(get_current_user)])
@@ -218,7 +257,53 @@ async def ver_perfil(current_user: UsuarioDB = Depends(get_current_user)):
         "rol": "usuario",
         "estado": "activo"
     }
+# ------------------- REGISTRO-------------------
 
+@app.post("/register")
+
+async def register_user(user: Usuario):
+
+    db = SessionLocal()
+
+    existing_user = db.query(
+        UsuarioDB
+    ).filter(
+
+        UsuarioDB.correo == user.correo
+
+    ).first()
+
+    if existing_user:
+
+        raise HTTPException(
+            status_code=400,
+            detail="El correo ya existe"
+        )
+
+    nuevo_usuario = UsuarioDB(
+
+        nombres=user.nombres,
+
+        apellidos=user.apellidos,
+
+        correo=user.correo,
+
+        telefono=user.telefono,
+
+        password=user.password
+    )
+
+    db.add(nuevo_usuario)
+
+    db.commit()
+
+    db.refresh(nuevo_usuario)
+
+    db.close()
+
+    return {
+        "message":"Usuario registrado"
+    }
 
 # ------------------- TOURS -------------------
 
@@ -321,6 +406,7 @@ async def eliminar_tour(id: int):
 
 
 # ------------------- CLIENTES -------------------
+
 
 @app.get("/clientes", dependencies=[Depends(get_current_user)])
 @log_action
@@ -634,3 +720,4 @@ async def seed_data():
     db.close()
 
     return {"mensaje": "Datos de ejemplo cargados correctamente"}
+

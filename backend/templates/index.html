@@ -8,9 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/style.css">
 </head>
+<div id="toast"></div>
+
 <body>
 
-<div id="toast" class="toast"></div>
 
 <!-- ============================================================
      SECCIÓN PÚBLICA (visible sin login)
@@ -23,8 +24,6 @@
 
 <section class="hero">
 
-    <div class="hero-overlay"></div>
-
     <!-- TOP BAR -->
     <div class="topbar">
 
@@ -32,11 +31,23 @@
             🇨🇴 Colombia · COP
         </div>
 
-        <div class="top-right">
-            <a href="#" onclick="abrirLogin()">Iniciar sesión</a>
-            <a href="#" onclick="abrirRegistro()">Crear cuenta</a>
-            <a href="#" onclick="mostrarAyuda('faq')">Ayuda</a>
+        <div class="top-right" id="topRightNav">
+
+            <a href="javascript:void(0)" onclick="abrirLogin()">
+                Iniciar sesión
+            </a>
+
+            <a href="javascript:void(0)" onclick="abrirRegistro()">
+                Crear cuenta
+            </a>
+
+            <a href="javascript:void(0)" onclick="mostrarAyuda('faq')">
+                Ayuda
+            </a>
+
         </div>
+
+    </div>
 
     </div>
 
@@ -469,9 +480,13 @@
      MODAL INICIO SESION
 ========================= -->
 
-<div class="auth-modal" id="authModal">
+<div 
+    class="auth-modal hidden"
+    id="authModal"
+>
 
     <div class="auth-box">
+        <div id="authMessage"></div>
 
         <button 
             class="close-auth"
@@ -542,7 +557,7 @@
             <input 
                 type="text"
                 id="loginUser"
-                placeholder="Usuario"
+                placeholder="Correo electrónico"
             >
 
             <input 
@@ -578,17 +593,21 @@
 
         <!-- REGISTER -->
 
-        <div 
-            id="registerForm"
-            style="display:none;"
-        >
+<div 
+    id="registerForm"
+    style="display:none;"
+>
+
+    <div class="register-layout">
+
+        <!-- LEFT -->
+        <div class="register-social">
 
             <h2>Crear cuenta</h2>
 
             <p>
-                Regístrate para reservar tours
+                Accede rápidamente con tus cuentas
             </p>
-
 
             <div class="social-login">
 
@@ -612,38 +631,111 @@
 
             </div>
 
-            <div class="divider">
+        </div>
 
-                <span>o regístrate manualmente</span>
+        <!-- RIGHT -->
+        <div class="register-manual">
+
+            <div class="divider-vertical">
+
+                <span>
+                    o crea manualmente
+                </span>
 
             </div>
 
+            <div class="register-grid">
 
+                <div class="field-auth">
 
-            <input 
-                type="text"
-                id="registerUser"
-                placeholder="Usuario"
-            >
+                    <label>Nombres</label>
 
-            <input 
-                type="password"
-                id="registerPass"
-                placeholder="Contraseña"
-            >
+                    <input 
+                        type="text"
+                        id="registerNombres"
+                        placeholder="Ej: Nicolas"
+                        oninput="validarNombres()"
+                    >
+
+                    <small id="errorNombres"></small>
+
+                </div>
+
+                <div class="field-auth">
+
+                    <label>Apellidos</label>
+
+                    <input 
+                        type="text"
+                        id="registerApellidos"
+                        placeholder="Ej: Raigoso"
+                        oninput="validarApellidos()"
+                    >
+
+                    <small id="errorApellidos"></small>
+
+                </div>
+
+                <div class="field-auth">
+
+                    <label>Correo electrónico</label>
+
+                    <input 
+                        type="email"
+                        id="registerCorreo"
+                        placeholder="correo@gmail.com"
+                        oninput="validarCorreo()"
+                    >
+
+                    <small id="errorCorreo"></small>
+
+                </div>
+
+                <div class="field-auth">
+
+                    <label>Teléfono</label>
+
+                    <input 
+                        type="text"
+                        id="registerTelefono"
+                        placeholder="3001234567"
+                        oninput="validarTelefono()"
+                    >
+
+                    <small id="errorTelefono"></small>
+
+                </div>
+
+                <div class="field-auth full-width">
+
+                    <label>Contraseña</label>
+
+                    <input 
+                        type="password"
+                        id="registerPass"
+                        placeholder="Mínimo 6 caracteres"
+                        oninput="validarPassword()"
+                    >
+
+                    <small id="errorPassword"></small>
+
+                </div>
+
+            </div>
+
             <button 
-            class="main-auth-btn"
-            onclick="crearCuenta()"
+                class="main-auth-btn"
+                onclick="crearCuenta()"
             >
-            Registrarme
+                Registrarme
             </button>
-           
 
         </div>
 
     </div>
 
 </div>
+
 
 <script src="/static/app.js"></script>
 <script>
