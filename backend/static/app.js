@@ -1,5 +1,6 @@
 console.log("✅ app.js cargado");
 
+/*const API = "";*/
 const API = "https://nicolasapp.azurewebsites.net";
 let token = "";
 let favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
