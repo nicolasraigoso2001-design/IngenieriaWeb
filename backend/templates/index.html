@@ -1,658 +1,843 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
-<title>Turismo Raigoso</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turismo Raigoso 🇨🇴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/style.css">
-
-<style>
-body{
-    margin:0;
-    font-family: Arial, Helvetica, sans-serif;
-
-    background-image: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470"); /* montaña caminata */
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed; /* 🔥 efecto pro */
-
-    color:white;
-}
-
-
-
-/* Ccapa principal pagina*/
-body::before{
-    content:"";
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-
-    background: linear-gradient(
-        rgba(255, 255, 255, 0.2),   /* 🔥 más claro */
-        rgba(0, 150, 100, 0.2)
-    );
-
-    z-index:-1;
-}
-
-/* CONTENEDOR GENERAL */
-#login{
-    display:flex;
-    height:100vh;
-}
-
-/* LADO IZQUIERDO */
-.login-left{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    padding:80px;
-
-    background: linear-gradient(
-        rgba(0, 50, 40, 0.7),
-        rgba(0, 0, 0, 0.6)
-    );
-}
-
-.login-left h1{
-    font-size:55px;
-    color:#a8e6cf;
-}
-
-.descripcion{
-    font-size:18px;
-    max-width:420px;
-    line-height:1.6;
-    color:#e0f7fa;
-}
-
-/* LADO DERECHO */
-.login-right{
-    flex:1;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-/* CAJA LOGIN */
-.login-box{
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
-    padding:40px;
-    border-radius:15px;
-    width:320px;
-    text-align:center;
-    border:1px solid rgba(255,255,255,0.2);
-}
-
-/* INPUTS */
-.login-box input{
-    width:100%;
-    padding:10px;
-    margin:10px 0;
-    border:none;
-    border-radius:5px;
-}
-
-.link{
-    margin-top:10px;
-    cursor:pointer;
-    font-size:14px;
-    color:#a8e6cf;
-    transition:0.3s;
-}
-
-.link:hover{
-    color:white;
-    text-decoration: underline;
-}
-
-/* BOTONES */
-.login-box button,
-nav button{
-    background: linear-gradient(135deg, #2E8B57, #1E90FF);
-    border:none;
-    color:white;
-    font-weight:bold;
-    transition:0.3s;
-}
-
-.login-box{
-    background: rgba(255,255,255,0.08); /* más transparente */
-    backdrop-filter: blur(15px); /* efecto vidrio */
-    padding:50px 40px;
-    border-radius:20px;
-    width:340px;
-    text-align:center;
-    
-
-    border:1px solid rgba(255,255,255,0.2);
-}
-
-.login-box{
-    background: rgba(0, 0, 0, 0.75); /* 🔥 oscuro elegante */
-    backdrop-filter: blur(10px);
-
-    padding:50px 40px;
-    border-radius:20px;
-    width:340px;
-    text-align:center;
-
-    border:1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-
-
-.login-box button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-
-    background: linear-gradient(135deg, #00b4d8, #0077b6);
-    border:none;
-    border-radius:10px;
-
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-.login-box button:hover{
-    transform:scale(1.05);
-}
-
-.login-box button:hover{
-    background: rgba(0,119,182,0.9);
-}
-
-
-.login-box hr{
-    margin:20px 0;
-    opacity:0.3;
-}
-
-/* SOCIAL LOGIN */
-.social-login{
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    margin-top:10px;
-}
-
-.social-login button{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-
-    padding:6px 10px; /* 🔥 MÁS PEQUEÑO */
-    font-size:13px;
-
-    border-radius:8px;
-    border:1px solid rgba(255,255,255,0.3);
-
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-
-    color:white;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-.social-login button:hover{
-    background: rgba(255,255,255,0.25);
-}
-
-.social-login button:hover{
-    background: rgba(255,255,255,0.2);
-    transform:scale(1.05);
-}
-
-/* GOOGLE */
-.google{
-    background:white;
-    color:black;
-}
-
-/* MICROSOFT */
-.microsoft{
-    background:#2F2F2F;
-    color:white;
-}
-
-/* ICONOS */
-.social-login img{
-    width:17px;
-}
-
-/* LOGIN */
-
-#login{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.login-box{
-    background: rgba(255, 255, 255, 0.12); /* 🔥 blanco MUY suave */
-    backdrop-filter: blur(18px); /* efecto vidrio */
-
-    padding:50px 40px;
-    border-radius:20px;
-    width:340px;
-    text-align:center;
-
-    border:1px solid rgba(255,255,255,0.25);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.login-box input{
-    width:100%;
-    padding:12px;
-    margin:12px 0;
-
-    border:none;
-    border-radius:8px;
-
-    background: rgba(255,255,255,0.2);
-    color:white;
-}
-
-.login-box input::placeholder{
-    color: rgba(255,255,255,0.7);
-}
-
-.login-box button{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    background:#00b4d8;
-    border:none;
-    border-radius:5px;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-}
-
-.login-box button:hover{
-    background:#0077b6;
-}
-
-
-
-
-/* LOGIN CON FONDO PROPIO */
-#login{
-    display:flex;
-    height:100vh;
-
-    background-image: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470");
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
-
-/* CAPA OSCURA ENCIMA DE LA IMAGEN */
-#login::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-
-   background: linear-gradient(
-    rgba(0, 0, 0, 0.4),
-    rgba(0, 80, 60, 0.3)
-
-    );
-
-    z-index:0;
-}
-
-
-nav{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    padding:20px;
-
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(5px);
-}
-
-header{
-    text-align:center;
-    padding:40px;
-
-    background: rgba(0,0,0,0.4); /* menos oscuro */
-    backdrop-filter: blur(5px);
-}
-
-
-
-/* ASEGURAR QUE EL CONTENIDO QUEDE ENCIMA */
-.login-left,
-.login-right{
-    position: relative;
-    z-index: 1;
-}
-
-/* APP ---------------------------------------------*/
-
-
-#contenedor{
-    margin-top:20px;
-
-    background: rgba(255, 255, 255, 0.15); /* 🔥 blanco translúcido */
-    backdrop-filter: blur(15px);
-
-    padding:30px;
-    border-radius:20px;
-
-    width:80%;
-    margin-left:auto;
-    margin-right:auto;
-
-    border:1px solid rgba(255,255,255,0.3);
-}
-
-/* GRID DE TOURS */
-#contenedor{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap:25px;
-
-    margin-top:25px;
-
-    background: transparent; /* 🔥 SIN FONDO */
-    backdrop-filter: none;   /* 🔥 SIN BLUR */
-
-    padding:10px;
-
-    width:90%;
-    margin-left:auto;
-    margin-right:auto;
-}
-
-
-.card{
-    background: white;
-    border-radius:20px;
-    overflow:hidden;
-    padding:0; /* 🔥 CLAVE */
-
-}
-
-
-
-.card:hover{
-    transform: scale(1.05);
-}
-
-.card:hover{
-    transform: scale(1.05);
-}
-
-.card:hover{
-    transform: scale(1.05);
-}
-
-
-/* IMAGEN TOUR*/
-.card img{
-    width:100%;
-    height:140px;
-    object-fit:cover;
-}
-
-/* CONTENIDO */
-
-.card-body{
-    background: white; /* 🔥 fondo blanco */
-    padding:12px;
-    text-align:left;
-}
-
-.card-body h3{
-    color:#333; /* 🔥 texto oscuro */
-    font-size:16px;
-    margin:5px 0;
-}
-
-.card-body p{
-    color:#666;
-    font-size:13px;
-}
-
-.card-body strong{
-    color:#000;
-    font-size:14px;
-}
-
-.card-body{
-    padding:12px;
-}
-
-.card-body h3{
-    font-size:16px;
-    margin:5px 0;
-}
-
-.card-body p{
-    font-size:13px;
-    margin:3px 0;
-}
-
-.card-body strong{
-    font-size:14px;
-}
-
-.btn{
-    margin-top:10px;
-    padding:6px 10px;
-    font-size:14px;
-    border:none;
-    border-radius:8px;
-    background:#2E8B57;
-    color:white;
-    cursor:pointer;
-}
-
-
-
-
-
-header{
-    text-align:center;
-    padding:40px;
-    background: rgba(0,0,0,0.5);
-    position:relative;
-}
-
-nav{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    padding:20px;
-    background: rgba(0,0,0,0.6);
-}
-
-nav button{
-    padding:12px 25px;
-    border:none;
-    border-radius:8px;
-    background:#00b4d8;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-nav button:hover{
-    background:#0077b6;
-    transform:scale(1.05);
-}
-
-section{
-    text-align:center;
-    padding:40px;
-}
-
-
-
-footer{
-    text-align:center;
-    padding:20px;
-    background: rgba(0,0,0,0.7);
-    position:fixed;
-    bottom:0;
-    width:100%;
-}
-</style>
-
 </head>
-
 <body>
 
-<!-- LOGIN -->
+<div id="toast" class="toast"></div>
 
-<div id="login">
+<!-- ============================================================
+     SECCIÓN PÚBLICA (visible sin login)
+     ============================================================ -->
 
-    <!-- LADO IZQUIERDO -->
-    <div class="login-left">
-        <h1>🌎 Turismo Raigoso</h1>
+  <!-- ── HERO ── -->
 
-        <p class="descripcion">
-            Explora el mundo disfrutando de los mejores lugares de Colombia,
-            vive experiencias únicas y descubre nuevas aventuras en cada destino.
-        </p>
+
+<!-- ================= HERO PRINCIPAL ================= -->
+
+<section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+
+        <div class="top-left">
+            🇨🇴 Colombia · COP
+        </div>
+
+        <div class="top-right">
+            <a href="#" onclick="abrirLogin()">Iniciar sesión</a>
+            <a href="#" onclick="abrirRegistro()">Crear cuenta</a>
+            <a href="#" onclick="mostrarAyuda('faq')">Ayuda</a>
+        </div>
+
     </div>
 
-    <!-- LADO DERECHO -->
-    <div class="login-right">
+    <!-- NAVBAR -->
+    <nav class="navbar">
 
-        <div class="login-box">
+        <div class="logo">
+            🌎 <span>Turismo Raigoso</span>
+        </div>
 
-            <h3>Iniciar sesión</h3>
+        <div class="nav-links">
 
-            <input type="text" id="usuario" placeholder="Usuario">
-            <input type="password" id="password" placeholder="Contraseña">
+            <button class="nav-btn">
+                🚗 Transporte + Hotel
+            </button>
 
-            <button onclick="login()">Ingresar</button>
+            <button class="nav-btn">
+                🏨 Hoteles
+            </button>
 
-            <hr>
+            <button class="nav-btn">
+                📍 Tours
+            </button>
 
-            <p>O continúa con:</p>
+            <button class="nav-btn">
+                🚐 Transporte
+            </button>
 
-            <div class="social-login">
+        
 
-                <button onclick="alert('Google próximamente')" class="google">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
-                    Google
+        </div>
+
+        <div class="nav-icons">
+
+            <button onclick="abrirFavoritosPublico()">
+                ❤️ Favoritos
+            </button>
+
+            <button onclick="mostrarToast('📅 Tus reservas')">
+                📅 Mis reservas
+            </button>
+
+        </div>
+
+    </nav>
+
+    <!-- CONTENIDO HERO -->
+    <div class="hero-content">
+
+        <h1>Descubre Colombia</h1>
+
+        <p>
+            Los mejores destinos, hoteles y tours al mejor precio
+        </p>
+
+        <!-- BUSCADOR -->
+        <div class="search-box">
+
+            <div class="tabs">
+
+                <button class="tab">
+                    🏨🚗Transporte + Hotel
                 </button>
 
-                <button onclick="alert('Microsoft próximamente')" class="microsoft">
-                    <img src="https://cdn-icons-png.flaticon.com/512/732/732221.png">
-                    Microsoft
+                <button class="tab">
+                    🏨 Solo Hotel
+                </button>
+
+                <button class="tab">
+                    🚗 Solo Transporte
                 </button>
 
             </div>
 
-            <hr>
+            <div class="search-grid">
 
-            <p class="link" onclick="mostrarRegistro()">Crear cuenta</p>
-            <p class="link" onclick="olvidarPassword()">¿Olvidaste tu contraseña?</p>
+                <div class="field">
+                    <label>Origen</label>
+                    <input type="text" value="Bogotá (BOG)">
+                </div>
 
+                <div class="field">
+                    <label>Destino</label>
+                    <input type="text" placeholder="¿A dónde vas?">
+                </div>
+
+                <div class="field">
+                    <label>Salida</label>
+                    <input type="date">
+                </div>
+
+                <div class="field">
+                    <label>Regreso</label>
+                    <input type="date">
+                </div>
+
+                <div class="field">
+                    <label>Pasajeros</label>
+
+                    <select>
+                        <option>1 adulto</option>
+                        <option>2 adultos</option>
+                        <option>Familia</option>
+                    </select>
+                </div>
+
+                <button class="btn-search" onclick="buscarViajes()">
+                    🔍 Buscar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= SERVICIOS ================= -->
+
+<section class="services">
+
+
+    <div class="service-card">
+
+        <div class="icon">🏨</div>
+
+        <h3>Hoteles</h3>
+
+        <p>Hoteles en Colombia</p>
+
+    </div>
+
+    <div class="service-card">
+
+        <div class="icon">🌿</div>
+
+        <h3>Tours</h3>
+
+        <p>Experiencias únicas</p>
+
+    </div>
+
+    <div class="service-card">
+
+        <div class="icon">🚐</div>
+
+        <h3>Transporte</h3>
+
+        <p>Traslados turísticos</p>
+
+    </div>
+
+    <div class="service-card">
+
+        <div class="icon">🏨🚐</div>
+
+        <h3>Hotel + Transporte</h3>
+
+        <p>Todo incluido</p>
+
+    </div>
+
+</section>
+
+<!-- ================= PROMOCIÓN ================= -->
+
+<section class="promo">
+
+    <div class="promo-text">
+
+        <span>🔥 OFERTA ESPECIAL</span>
+
+        <h2>
+            Hasta 40% OFF
+        </h2>
+
+        <p>
+            en hoteles seleccionados en Colombia
+        </p>
+
+        <button>
+            Ver ofertas →
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ================= DESTINOS ================= -->
+
+<section class="section">
+
+    <div class="section-header">
+
+        <h2>Destinos destacados</h2>
+
+        <button>
+            Ver todos →
+        </button>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="destination-card">
+
+            <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c">
+
+            <div class="card-info">
+
+                <h3>Cartagena</h3>
+
+                <p>Desde $320.000</p>
+
+            </div>
+
+        </div>
+
+        <div class="destination-card">
+
+            <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa">
+
+            <div class="card-info">
+
+                <h3>Medellín</h3>
+
+                <p>Desde $280.000</p>
+
+            </div>
+
+        </div>
+
+        <div class="destination-card">
+
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+
+            <div class="card-info">
+
+                <h3>San Andrés</h3>
+
+                <p>Desde $450.000</p>
+
+            </div>
+
+        </div>
+
+        <div class="destination-card">
+
+            <img src="https://images.unsplash.com/photo-1528127269322-539801943592">
+
+            <div class="card-info">
+
+                <h3>Santa Marta</h3>
+
+                <p>Desde $310.000</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <div>
+
+            <h3>Turismo Raigoso</h3>
+
+            <p>
+                Viajes y experiencias únicas por Colombia
+            </p>
+
+        </div>
+
+        <div>
+
+            <h4>Ayuda</h4>
+
+            <p>Preguntas frecuentes</p>
+            <p>Contacto</p>
+            <p>Términos y condiciones</p>
+
+        </div>
+
+        <div>
+
+            <h4>Descarga nuestra app</h4>
+
+            <p>Disponible próximamente</p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+
+</div><!-- /public-site -->
+
+<!-- ============================================================
+     MODALES DE AUTH
+     ============================================================ -->
+
+<!-- MODAL LOGIN -->
+<div class="modal-overlay" id="modal-login" onclick="cerrarModalLogin(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="cerrarModalLogin()">✕</button>
+    <div class="modal-logo">✈️</div>
+    <h2>Iniciar sesión</h2>
+    <p class="modal-sub">Accede a tus reservas y favoritos</p>
+
+    <div class="form-group">
+      <label>Usuario</label>
+      <input type="text" id="usuario" placeholder="Tu usuario" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="password" placeholder="Tu contraseña" autocomplete="current-password">
+    </div>
+    <span class="field-error" id="login-error"></span>
+
+    <button class="btn-modal-primary" onclick="login()">Ingresar</button>
+
+    <div class="modal-divider"><span>o continúa con</span></div>
+
+    <div class="social-login">
+      <button class="social-btn google" onclick="alert('Google próximamente')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"> Google
+      </button>
+      <button class="social-btn microsoft" onclick="alert('Microsoft próximamente')">
+        <img src="https://cdn-icons-png.flaticon.com/512/732/732221.png"> Microsoft
+      </button>
+    </div>
+
+    <div class="modal-links">
+      <button class="link-btn" onclick="switchModal('registro')">✨ Crear cuenta gratis</button>
+      <button class="link-btn" onclick="olvidarPassword()">🔑 Olvidé mi contraseña</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REGISTRO -->
+<div class="modal-overlay" id="modal-registro" onclick="cerrarModalRegistro(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="cerrarModalRegistro()">✕</button>
+    <div class="modal-logo">✨</div>
+    <h2>Crear cuenta</h2>
+    <p class="modal-sub">Únete gratis y empieza a explorar</p>
+
+    <div class="form-group">
+      <label>Usuario *</label>
+      <input type="text" id="newUser" placeholder="Mínimo 3 caracteres" maxlength="50">
+    </div>
+    <div class="form-group">
+      <label>Contraseña *</label>
+      <input type="password" id="newPass" placeholder="Mínimo 6 caracteres">
+    </div>
+    <div class="form-group">
+      <label>Confirmar contraseña *</label>
+      <input type="password" id="newPass2" placeholder="Repite tu contraseña">
+    </div>
+    <span class="field-error" id="reg-error"></span>
+
+    <button class="btn-modal-primary" onclick="registrar()">Crear cuenta</button>
+
+    <div class="modal-links">
+      <button class="link-btn" onclick="switchModal('login')">← Ya tengo cuenta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP (después de login)
+     ============================================================ -->
+<div id="app" style="display:none;">
+
+  <header class="app-header">
+    <div class="header-brand">
+      <span>✈️</span>
+      <span>Turismo <strong>Raigoso</strong></span>
+    </div>
+    <div class="header-user">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span id="username-display">Usuario</span>
+    </div>
+  </header>
+
+  <nav class="app-nav">
+    <button id="nav-tours" onclick="cargarTours()">🌍 Tours</button>
+    <button id="nav-clientes" onclick="cargarClientes()">👥 Clientes</button>
+    <button id="nav-reservas" onclick="cargarReservas()">📅 Reservas</button>
+    <button id="nav-guias" onclick="cargarGuias()">🧭 Guías</button>
+    <button id="nav-favoritos" onclick="cargarFavoritos()">⭐ Favoritos</button>
+    <button id="nav-perfil" onclick="verPerfil()">👤 Perfil</button>
+    <button onclick="logout()" class="btn-logout">🚪 Salir</button>
+  </nav>
+
+  <main>
+    <h2 id="titulo">Bienvenido</h2>
+    <div id="contenedor">
+      <div class="empty-state">Selecciona una opción del menú para comenzar 🌎</div>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <p>🇨🇴 Turismo Raigoso — Descubre Colombia &nbsp;|&nbsp; ☁️ Azure</p>
+  </footer>
+
+</div>
+
+<!-- MODAL SERVICIO -->
+<div class="modal-overlay" id="modal-servicio" onclick="cerrarModalServicio(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="cerrarModalServicio()">✕</button>
+    <div id="modal-servicio-content"></div>
+  </div>
+</div>
+
+
+<!-- =========================
+     MODAL INICIO SESION
+========================= -->
+
+<div class="auth-modal" id="authModal">
+
+    <div class="auth-box">
+
+        <button 
+            class="close-auth"
+            onclick="cerrarAuth()"
+        >
+            ✖
+        </button>
+
+        <div class="auth-tabs">
+
+            <button 
+                id="loginTab"
+                class="auth-tab active"
+                onclick="mostrarLogin()"
+            >
+                Iniciar sesión
+            </button>
+
+            <button 
+                id="registerTab"
+                class="auth-tab"
+                onclick="mostrarRegistro()"
+            >
+                Crear cuenta
+            </button>
+
+        </div>
+
+        <!-- LOGIN -->
+
+        <div id="loginForm">
+
+            <h2>Bienvenido</h2>
+
+            <p>
+                Ingresa a Turismo Raigoso
+            </p>
+
+            <div class="social-login">
+
+                <button 
+                    class="google-btn"
+                    onclick="loginGoogle()"
+                >
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg">
+
+                    Continuar con Google
+                </button>
+
+                <button 
+                    class="microsoft-btn"
+                    onclick="loginMicrosoft()"
+                >
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg">
+
+                    Continuar con Microsoft
+                </button>
+
+            </div>
+
+            <div class="divider">
+
+                <span>o inicia sesión manualmente</span>
+
+            </div>
+
+
+            <input 
+                type="text"
+                id="loginUser"
+                placeholder="Usuario"
+            >
+
+            <input 
+                type="password"
+                id="loginPass"
+                placeholder="Contraseña"
+            >
+
+            <button 
+                class="main-auth-btn"
+                onclick="login()"
+            >
+                Ingresar
+            </button>
 
             
+
+            <div class="auth-links">
+
+            <a href="#" onclick="mostrarToast('📧 Recuperación próximamente')">
+                ¿Olvidaste tu contraseña?
+            </a>
+
+            <a href="#" onclick="mostrarRegistro()">
+                Crear cuenta
+            </a>
+
+</div>
+
+            
+
+        </div>
+
+        <!-- REGISTER -->
+
+        <div 
+            id="registerForm"
+            style="display:none;"
+        >
+
+            <h2>Crear cuenta</h2>
+
+            <p>
+                Regístrate para reservar tours
+            </p>
+
+
+            <div class="social-login">
+
+                <button 
+                    class="google-btn"
+                    onclick="loginGoogle()"
+                >
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg">
+
+                    Continuar con Google
+                </button>
+
+                <button 
+                    class="microsoft-btn"
+                    onclick="loginMicrosoft()"
+                >
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg">
+
+                    Continuar con Microsoft
+                </button>
+
+            </div>
+
+            <div class="divider">
+
+                <span>o regístrate manualmente</span>
+
+            </div>
+
+
+
+            <input 
+                type="text"
+                id="registerUser"
+                placeholder="Usuario"
+            >
+
+            <input 
+                type="password"
+                id="registerPass"
+                placeholder="Contraseña"
+            >
+            <button 
+            class="main-auth-btn"
+            onclick="crearCuenta()"
+            >
+            Registrarme
+            </button>
+           
+
         </div>
 
     </div>
 
 </div>
 
-<!-- APP -->
-
-
-<!-- DETALLE DE TOUR -->
-<div id="tour-detalle" style="display:none;">
-    <div class="detalle-card">
-
-        <button onclick="cerrarDetalle()" class="btn-cerrar">✖</button>
-
-        <img id="detalle-img" src="" />
-
-        <h2 id="detalle-nombre"></h2>
-        <p id="detalle-ciudad"></p>
-        <h3 id="detalle-precio"></h3>
-
-        <p id="detalle-info">
-            Explora este destino turístico con experiencias únicas, cultura y naturaleza.
-        </p>
-
-        <button class="btn" onclick="agregarFavoritoDetalle()">❤️ Favorito</button>
-
-    </div>
-</div>
-
-
-
-<div id="app">
-
-<header>
-    <h1>🌎 Turismo Raigoso</h1>
-    <p>Explora los mejores destinos turísticos</p>
-
-    <!-- USUARIO -->
-    <div style="
-        position:absolute;
-        top:20px;
-        right:30px;
-        background: rgba(0,0,0,0.5);
-        padding:8px 12px;
-        border-radius:8px;
-        font-size:14px;
-    ">
-        👤 <span id="username-display">Usuario</span>
-    </div>
-</header>
-
-<nav>
-    <button onclick="cargarTours()">🌍 Tours</button>
-    <button onclick="cargarClientes()">👥 Clientes</button>
-    <button onclick="cargarReservas()">📅 Reservas</button>
-    <button onclick="cargarFavoritos()">⭐ Favoritos</button>
-    <button onclick="verPerfil()">👤 Perfil</button>
-    <button onclick="logout()">🚪 Cerrar sesión</button>
-</nav>
-
-<section>
-
-<h2 id="titulo">Bienvenido</h2>
-
-<div id="contenedor">
-<p>Selecciona una opción para comenzar a explorar nuestros sitios.</p>
-</div>
-
-</section>
-
-<footer>
-<p>Gracias por visitarnos ☁️</p>
-</footer>
-
-</div>
-
-<!-- IMPORTANTE: SOLO app.js -->
 <script src="/static/app.js"></script>
+<script>
+// ── DATOS PÚBLICOS ──
+const DESTINOS = [
+  { ciudad:"Cartagena", desc:"Ciudad amurallada y playas del Caribe", precio:320000, img:"https://images.unsplash.com/photo-1583329507640-3a8af4d3527c?w=500&q=80", estrellas:5 },
+  { ciudad:"Bogotá", desc:"La capital cultural de Colombia", precio:150000, img:"https://images.unsplash.com/photo-1597916829826-02e5bb4a54e0?w=500&q=80", estrellas:4 },
+  { ciudad:"Medellín", desc:"La ciudad de la eterna primavera", precio:180000, img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80", estrellas:4 },
+  { ciudad:"Santa Marta", desc:"Tayrona, Sierra Nevada y el Caribe", precio:280000, img:"https://images.unsplash.com/photo-1583265266492-01dce48c2a63?w=500&q=80", estrellas:5 },
+  { ciudad:"Salento", desc:"Corazón del Eje Cafetero", precio:140000, img:"https://images.unsplash.com/photo-1599488669271-3a3b02cbe58a?w=500&q=80", estrellas:4 },
+  { ciudad:"San Andrés", desc:"Archipiélago y mar de siete colores", precio:450000, img:"https://images.unsplash.com/photo-1581889470536-467bdbe30cd0?w=500&q=80", estrellas:5 },
+];
+
+const TOURS_PUB = [
+  { nombre:"Ciudad Perdida", ciudad:"Santa Marta", precio:750000, duracion:"4 días", img:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80", badge:"Aventura" },
+  { nombre:"Caño Cristales", ciudad:"La Macarena", precio:900000, duracion:"3 días", img:"https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500&q=80", badge:"Naturaleza" },
+  { nombre:"Desierto de la Tatacoa", ciudad:"Villavieja", precio:320000, duracion:"2 días", img:"https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=500&q=80", badge:"Desierto" },
+  { nombre:"Parque del Café", ciudad:"Montenegro", precio:180000, duracion:"1 día", img:"https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=500&q=80", badge:"Cultural" },
+];
+
+const PROMOS = [
+  { titulo:"3 noches en Cartagena", desc:"Hotel 5★ + traslados incluidos", antes:1200000, precio:750000, img:"https://images.unsplash.com/photo-1583329507640-3a8af4d3527c?w=600&q=80" },
+  { titulo:"Eje Cafetero Express", desc:"2 noches + finca + tours", antes:800000, precio:490000, img:"https://images.unsplash.com/photo-1599488669271-3a3b02cbe58a?w=600&q=80" },
+  { titulo:"Semana en San Andrés", desc:"Vuelo + hotel + snorkel", antes:2100000, precio:1350000, img:"https://images.unsplash.com/photo-1581889470536-467bdbe30cd0?w=600&q=80" },
+];
+
+function fmt(n){ return "$" + Number(n).toLocaleString("es-CO"); }
+
+// Render destinos
+function renderDestinos(){
+  const g = document.getElementById("destinos-pub");
+  if(!g) return;
+  g.innerHTML = DESTINOS.map(d => `
+    <div class="dest-card" onclick="verDestino('${d.ciudad}')">
+      <div class="dest-img-wrap">
+        <img src="${d.img}" alt="${d.ciudad}" onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'">
+        <span class="dest-badge">${"⭐".repeat(d.estrellas)}</span>
+      </div>
+      <div class="dest-body">
+        <h3>${d.ciudad}</h3>
+        <p>${d.desc}</p>
+        <div class="dest-precio">Desde <strong>${fmt(d.precio)}</strong> <span>por noche</span></div>
+        <button class="btn-ver" onclick="event.stopPropagation(); abrirLoginModal()">Ver hotel →</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+// Render tours
+function renderToursPub(){
+  const g = document.getElementById("tours-pub-grid");
+  if(!g) return;
+  g.innerHTML = TOURS_PUB.map(t => `
+    <div class="tour-card" onclick="abrirLoginModal()">
+      <img src="${t.img}" alt="${t.nombre}" onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'">
+      <div class="tour-badge-tipo">${t.badge}</div>
+      <div class="tour-body">
+        <h3>${t.nombre}</h3>
+        <p>📍 ${t.ciudad} &nbsp;·&nbsp; ⏱️ ${t.duracion}</p>
+        <div class="tour-precio">Desde <strong>${fmt(t.precio)}</strong></div>
+        <button class="btn-ver">Reservar →</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+// Render promos
+function renderPromos(){
+  const g = document.getElementById("promos-grid");
+  if(!g) return;
+  g.innerHTML = PROMOS.map(p => {
+    const pct = Math.round((1 - p.precio/p.antes)*100);
+    return `
+    <div class="promo-card" onclick="abrirLoginModal()">
+      <img src="${p.img}" alt="${p.titulo}">
+      <div class="promo-off">-${pct}%</div>
+      <div class="promo-body">
+        <h3>${p.titulo}</h3>
+        <p>${p.desc}</p>
+        <div class="promo-precios">
+          <span class="precio-antes">${fmt(p.antes)}</span>
+          <span class="precio-ahora">${fmt(p.precio)}</span>
+        </div>
+        <button class="btn-ver-dark">Ver oferta →</button>
+      </div>
+    </div>
+  `}).join("");
+}
+
+// BÚSQUEDA
+function switchBusca(btn, tipo){
+  document.querySelectorAll(".btab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".busca-form").forEach(f=>f.style.display="none");
+  document.getElementById("busca-"+tipo).style.display="block";
+}
+
+function buscarViajes(){
+  const dest = document.getElementById("dest-input")?.value?.trim() || "Colombia";
+  mostrarToast(`🔍 Buscando viajes a ${dest || "Colombia"}...`);
+  setTimeout(()=>abrirLoginModal(), 800);
+}
+
+function swapCities(){
+  const d = document.getElementById("dest-input");
+  const prev = d.value;
+  d.value = "Bogotá (BOG)";
+  mostrarToast("⇄ Ciudades intercambiadas");
+}
+
+// MODALES LOGIN / REGISTRO
+function abrirLoginModal(){
+  document.getElementById("modal-login").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function cerrarModalLogin(e){
+  if(!e || e.target.id==="modal-login"|| e.currentTarget===document.querySelector(".modal-close")){
+    document.getElementById("modal-login").classList.remove("open");
+    document.body.style.overflow="";
+  }
+}
+function abrirRegistroModal(){
+  document.getElementById("modal-registro").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function cerrarModalRegistro(e){
+  if(!e || e.target.id==="modal-registro"){
+    document.getElementById("modal-registro").classList.remove("open");
+    document.body.style.overflow="";
+  }
+}
+function switchModal(tipo){
+  if(tipo==="registro"){ cerrarModalLogin(); abrirRegistroModal(); }
+  else { cerrarModalRegistro(); abrirLoginModal(); }
+}
+
+// SERVICIO MODAL
+function mostrarServicio(tipo){
+  const info = {
+    vuelos:   { icon:"✈️", titulo:"Vuelos", desc:"Encuentra los mejores precios en vuelos nacionales e internacionales desde todas las ciudades de Colombia." },
+    hoteles:  { icon:"🏨", titulo:"Hoteles", desc:"Más de 500 hoteles disponibles en los mejores destinos de Colombia, desde hostales hasta resorts 5 estrellas." },
+    tours:    { icon:"🗺️", titulo:"Tours", desc:"Descubre Colombia con guías expertos. Tours culturales, de aventura, naturaleza y más." },
+    traslados:{ icon:"🚐", titulo:"Traslados", desc:"Traslados aeropuerto-hotel y entre ciudades. Cómodos, seguros y puntuales." },
+    seguro:   { icon:"🛡️", titulo:"Seguro de viaje", desc:"Viaja tranquilo con nuestra cobertura médica, equipaje y cancelación. Desde $25.000 COP." },
+    cruceros: { icon:"🚢", titulo:"Cruceros", desc:"Cruceros por el Caribe, Europa y el mundo. Salidas desde Cartagena y Barranquilla." },
+    autos:    { icon:"🚗", titulo:"Alquiler de autos", desc:"Las mejores marcas al mejor precio. Disponible en todos los aeropuertos principales de Colombia." },
+    paquetes: { icon:"🎒", titulo:"Paquetes todo incluido", desc:"Vuelo + hotel + tours + traslados en un solo paquete con el mejor precio garantizado." },
+    faq:      { icon:"❓", titulo:"Preguntas frecuentes", desc:"¿Cómo reservo? ¿Puedo cancelar? ¿Cómo pago? Resolvemos todas tus dudas." },
+    contacto: { icon:"📞", titulo:"Contáctanos", desc:"Llámanos al +57 (1) 123-4567 o escríbenos a info@turismor.co. Atención 24/7." },
+    terminos: { icon:"📄", titulo:"Términos y condiciones", desc:"Consulta nuestras políticas de reserva, cancelación y uso de la plataforma." },
+    privacidad:{ icon:"🔒", titulo:"Política de privacidad", desc:"Tu información está protegida. Nunca compartimos tus datos con terceros." },
+  };
+  const s = info[tipo] || { icon:"ℹ️", titulo:"Información", desc:"Próximamente disponible." };
+  document.getElementById("modal-servicio-content").innerHTML = `
+    <div style="text-align:center;padding:10px 0 20px">
+      <div style="font-size:52px;margin-bottom:14px">${s.icon}</div>
+      <h2 style="margin-bottom:12px">${s.titulo}</h2>
+      <p style="color:#555;line-height:1.7;margin-bottom:24px">${s.desc}</p>
+      <button class="btn-modal-primary" onclick="abrirLoginModal();cerrarModalServicio()">Ver disponibilidad →</button>
+    </div>
+  `;
+  document.getElementById("modal-servicio").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function mostrarAyuda(tipo){ mostrarServicio(tipo); }
+function cerrarModalServicio(e){
+  if(!e || e.target.id==="modal-servicio"){
+    document.getElementById("modal-servicio").classList.remove("open");
+    document.body.style.overflow="";
+  }
+}
+
+function verDestino(ciudad){
+  mostrarServicio("hoteles");
+  mostrarToast("📍 Mostrando hoteles en " + ciudad);
+}
+function verTodosDestinos(){ mostrarToast("🌍 Cargando todos los destinos..."); setTimeout(()=>abrirLoginModal(),600); }
+function verTodosTours(){ mostrarToast("🗺️ Cargando todos los tours..."); setTimeout(()=>abrirLoginModal(),600); }
+function verPromocion(){ mostrarToast("🔥 Cargando promociones..."); setTimeout(()=>abrirLoginModal(),600); }
+function abrirFavoritosPublico(){ mostrarToast("⭐ Inicia sesión para ver tus favoritos"); abrirLoginModal(); }
+function scrollToSection(id){ document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); }
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  renderDestinos();
+  renderToursPub();
+  renderPromos();
+  // Fechas por defecto
+  const hoy = new Date();
+  const manana = new Date(hoy); manana.setDate(hoy.getDate()+7);
+  const regreso = new Date(hoy); regreso.setDate(hoy.getDate()+14);
+  const fmt2 = d => d.toISOString().split("T")[0];
+  ["fecha-salida","checkin"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=fmt2(manana); });
+  ["fecha-regreso","checkout"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=fmt2(regreso); });
+});
+</script>
 </body>
 </html>
-

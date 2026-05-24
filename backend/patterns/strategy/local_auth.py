@@ -1,18 +1,24 @@
 from patterns.strategy.auth_strategy import AuthStrategy
 
+from database.connection import SessionLocal
+from database.models import UsuarioDB
+
+
 class LocalAuthStrategy(AuthStrategy):
 
-    def __init__(self, usuarios):
-        self.usuarios = usuarios
+    def authenticate(
+        self,
+        username: str,
+        password: str
+    ):
 
-    def authenticate(self, username, password):
+        db = SessionLocal()
 
-        for user in self.usuarios:
+        user = db.query(UsuarioDB).filter(
+            UsuarioDB.username == username,
+            UsuarioDB.password == password
+        ).first()
 
-            if (
-                user["username"] == username
-                and user["password"] == password
-            ):
-                return user
+        db.close()
 
-        return None
+        return user

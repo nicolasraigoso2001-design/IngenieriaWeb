@@ -5,3 +5,5 @@ class AuthStrategy(ABC):
     @abstractmethod
     def authenticate(self, username, password):
         pass
+
+    
