@@ -1,12 +1,17 @@
 from database.connection import SessionLocal, engine
+
+
+
 from database.models import (
+    
     Base,
     UsuarioDB,
     TourDB,
     ClienteDB,
     GuiaDB,
     TransporteDB,
-    ReservaDB
+    ReservaDB,
+    HotelDB,
 )
 
 # CREAR TABLAS
@@ -159,6 +164,93 @@ reservas = [
     )
 ]
 
+
+
+
+
+
+tours = [
+
+    TourDB(
+
+        nombre="Tour Cartagena Premium",
+
+        ciudad="Cartagena",
+
+        precio=850000,
+
+        descripcion="Disfruta playas, ciudad amurallada y gastronomía.",
+
+        imagen="https://images.unsplash.com/photo-1519046904884-53103b34b206"
+    ),
+
+    TourDB(
+
+        nombre="Eje Cafetero Experience",
+
+        ciudad="Pereira",
+
+        precio=640000,
+
+        descripcion="Paisajes cafeteros y fincas tradicionales.",
+
+        imagen="https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+    ),
+
+    TourDB(
+
+        nombre="Medellín Cultural",
+
+        ciudad="Medellín",
+
+        precio=520000,
+
+        descripcion="Comuna 13, metro cable y cultura paisa.",
+
+        imagen="https://images.unsplash.com/photo-1544986581-efac024faf62"
+    )
+]
+
+hoteles = [
+
+    HotelDB(
+
+        nombre="Hotel Caribe Luxury",
+
+        ciudad="Cartagena",
+
+        precio=420000,
+
+        descripcion="Hotel 5 estrellas frente al mar.",
+
+        imagen="https://images.unsplash.com/photo-1566073771259-6a8506099945"
+    ),
+
+    HotelDB(
+
+        nombre="Hotel Andes Plaza",
+
+        ciudad="Bogotá",
+
+        precio=310000,
+
+        descripcion="Vista premium y desayuno incluido.",
+
+        imagen="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"
+    )
+]
+
+
+db.add_all(tours)
+
+db.add_all(hoteles)
+
+db.add_all(clientes)
+
+db.add_all(guias)
+
+db.add_all(transportes)
+
 db.add_all(reservas)
 
 # GUARDAR
@@ -167,3 +259,9 @@ db.commit()
 db.close()
 
 print("✅ Base de datos creada correctamente")
+
+
+# GUARDAR
+db.commit()
+
+db.close()

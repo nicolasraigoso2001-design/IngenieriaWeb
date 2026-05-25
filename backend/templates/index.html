@@ -10,6 +10,29 @@
 </head>
 <div id="toast"></div>
 
+<!-- USER PANEL -->
+
+<div 
+    class="user-panel hidden"
+    id="userPanel"
+>
+
+    <div class="user-panel-box">
+
+        <button 
+            class="close-panel"
+            onclick="cerrarPanel()"
+        >
+            ✖
+        </button>
+
+        <div id="panelContent"></div>
+
+    </div>
+
+</div>
+
+
 <body>
 
 
@@ -68,7 +91,10 @@
                 🏨 Hoteles
             </button>
 
-            <button class="nav-btn">
+            <button 
+                class="nav-btn"
+                onclick="mostrarToursPublicos()"
+            >
                 📍 Tours
             </button>
 
@@ -82,11 +108,11 @@
 
         <div class="nav-icons">
 
-            <button onclick="abrirFavoritosPublico()">
+           <button onclick="abrirFavoritosProtegido()">
                 ❤️ Favoritos
             </button>
 
-            <button onclick="mostrarToast('📅 Tus reservas')">
+            <button onclick="abrirReservasProtegido()">
                 📅 Mis reservas
             </button>
 
@@ -166,6 +192,15 @@
 
 </section>
 
+
+</section>
+
+<!-- HOTELES -->
+
+
+
+
+
 <!-- ================= SERVICIOS ================= -->
 
 <section class="services">
@@ -236,6 +271,26 @@
     </div>
 
 </section>
+
+<!-- ================= TOURS ================= -->
+
+<section class="section">
+
+    <div class="section-header">
+
+        <h2>
+            🌍 Tours disponibles
+        </h2>
+
+    </div>
+
+    <div 
+        class="cards-grid"
+        id="contenedorToursPublicos"
+    ></div>
+
+</section>
+
 
 <!-- ================= DESTINOS ================= -->
 
@@ -356,77 +411,6 @@
 
 </div><!-- /public-site -->
 
-<!-- ============================================================
-     MODALES DE AUTH
-     ============================================================ -->
-
-<!-- MODAL LOGIN -->
-<div class="modal-overlay" id="modal-login" onclick="cerrarModalLogin(event)">
-  <div class="modal-box">
-    <button class="modal-close" onclick="cerrarModalLogin()">✕</button>
-    <div class="modal-logo">✈️</div>
-    <h2>Iniciar sesión</h2>
-    <p class="modal-sub">Accede a tus reservas y favoritos</p>
-
-    <div class="form-group">
-      <label>Usuario</label>
-      <input type="text" id="usuario" placeholder="Tu usuario" autocomplete="username">
-    </div>
-    <div class="form-group">
-      <label>Contraseña</label>
-      <input type="password" id="password" placeholder="Tu contraseña" autocomplete="current-password">
-    </div>
-    <span class="field-error" id="login-error"></span>
-
-    <button class="btn-modal-primary" onclick="login()">Ingresar</button>
-
-    <div class="modal-divider"><span>o continúa con</span></div>
-
-    <div class="social-login">
-      <button class="social-btn google" onclick="alert('Google próximamente')">
-        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"> Google
-      </button>
-      <button class="social-btn microsoft" onclick="alert('Microsoft próximamente')">
-        <img src="https://cdn-icons-png.flaticon.com/512/732/732221.png"> Microsoft
-      </button>
-    </div>
-
-    <div class="modal-links">
-      <button class="link-btn" onclick="switchModal('registro')">✨ Crear cuenta gratis</button>
-      <button class="link-btn" onclick="olvidarPassword()">🔑 Olvidé mi contraseña</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL REGISTRO -->
-<div class="modal-overlay" id="modal-registro" onclick="cerrarModalRegistro(event)">
-  <div class="modal-box">
-    <button class="modal-close" onclick="cerrarModalRegistro()">✕</button>
-    <div class="modal-logo">✨</div>
-    <h2>Crear cuenta</h2>
-    <p class="modal-sub">Únete gratis y empieza a explorar</p>
-
-    <div class="form-group">
-      <label>Usuario *</label>
-      <input type="text" id="newUser" placeholder="Mínimo 3 caracteres" maxlength="50">
-    </div>
-    <div class="form-group">
-      <label>Contraseña *</label>
-      <input type="password" id="newPass" placeholder="Mínimo 6 caracteres">
-    </div>
-    <div class="form-group">
-      <label>Confirmar contraseña *</label>
-      <input type="password" id="newPass2" placeholder="Repite tu contraseña">
-    </div>
-    <span class="field-error" id="reg-error"></span>
-
-    <button class="btn-modal-primary" onclick="registrar()">Crear cuenta</button>
-
-    <div class="modal-links">
-      <button class="link-btn" onclick="switchModal('login')">← Ya tengo cuenta</button>
-    </div>
-  </div>
-</div>
 
 <!-- ============================================================
      APP (después de login)
@@ -586,6 +570,8 @@
             </a>
 
 </div>
+
+
 
             
 
@@ -778,7 +764,7 @@ function renderDestinos(){
         <h3>${d.ciudad}</h3>
         <p>${d.desc}</p>
         <div class="dest-precio">Desde <strong>${fmt(d.precio)}</strong> <span>por noche</span></div>
-        <button class="btn-ver" onclick="event.stopPropagation(); abrirLoginModal()">Ver hotel →</button>
+        <button class="btn-ver" onclick="event.stopPropagation(); abrirLogin()">Ver hotel →</button>
       </div>
     </div>
   `).join("");
@@ -789,11 +775,14 @@ function renderToursPub(){
   const g = document.getElementById("tours-pub-grid");
   if(!g) return;
   g.innerHTML = TOURS_PUB.map(t => `
-    <div class="tour-card" onclick="abrirLoginModal()">
+    <div class="tour-card" onclick="abrirLogin()">
       <img src="${t.img}" alt="${t.nombre}" onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'">
       <div class="tour-badge-tipo">${t.badge}</div>
       <div class="tour-body">
         <h3>${t.nombre}</h3>
+        <p class="descripcion-card">
+            ${t.descripcion || "Sin descripción"}
+        </p>
         <p>📍 ${t.ciudad} &nbsp;·&nbsp; ⏱️ ${t.duracion}</p>
         <div class="tour-precio">Desde <strong>${fmt(t.precio)}</strong></div>
         <button class="btn-ver">Reservar →</button>
@@ -809,7 +798,7 @@ function renderPromos(){
   g.innerHTML = PROMOS.map(p => {
     const pct = Math.round((1 - p.precio/p.antes)*100);
     return `
-    <div class="promo-card" onclick="abrirLoginModal()">
+    <div class="promo-card" onclick="abrirLogin()">
       <img src="${p.img}" alt="${p.titulo}">
       <div class="promo-off">-${pct}%</div>
       <div class="promo-body">
@@ -836,7 +825,7 @@ function switchBusca(btn, tipo){
 function buscarViajes(){
   const dest = document.getElementById("dest-input")?.value?.trim() || "Colombia";
   mostrarToast(`🔍 Buscando viajes a ${dest || "Colombia"}...`);
-  setTimeout(()=>abrirLoginModal(), 800);
+  setTimeout(()=>abrirLogin(), 800);
 }
 
 function swapCities(){
@@ -846,31 +835,6 @@ function swapCities(){
   mostrarToast("⇄ Ciudades intercambiadas");
 }
 
-// MODALES LOGIN / REGISTRO
-function abrirLoginModal(){
-  document.getElementById("modal-login").classList.add("open");
-  document.body.style.overflow="hidden";
-}
-function cerrarModalLogin(e){
-  if(!e || e.target.id==="modal-login"|| e.currentTarget===document.querySelector(".modal-close")){
-    document.getElementById("modal-login").classList.remove("open");
-    document.body.style.overflow="";
-  }
-}
-function abrirRegistroModal(){
-  document.getElementById("modal-registro").classList.add("open");
-  document.body.style.overflow="hidden";
-}
-function cerrarModalRegistro(e){
-  if(!e || e.target.id==="modal-registro"){
-    document.getElementById("modal-registro").classList.remove("open");
-    document.body.style.overflow="";
-  }
-}
-function switchModal(tipo){
-  if(tipo==="registro"){ cerrarModalLogin(); abrirRegistroModal(); }
-  else { cerrarModalRegistro(); abrirLoginModal(); }
-}
 
 // SERVICIO MODAL
 function mostrarServicio(tipo){
@@ -894,7 +858,7 @@ function mostrarServicio(tipo){
       <div style="font-size:52px;margin-bottom:14px">${s.icon}</div>
       <h2 style="margin-bottom:12px">${s.titulo}</h2>
       <p style="color:#555;line-height:1.7;margin-bottom:24px">${s.desc}</p>
-      <button class="btn-modal-primary" onclick="abrirLoginModal();cerrarModalServicio()">Ver disponibilidad →</button>
+      <button class="btn-modal-primary" onclick="abrirLogin();cerrarModalServicio()">Ver disponibilidad →</button>
     </div>
   `;
   document.getElementById("modal-servicio").classList.add("open");
@@ -912,10 +876,10 @@ function verDestino(ciudad){
   mostrarServicio("hoteles");
   mostrarToast("📍 Mostrando hoteles en " + ciudad);
 }
-function verTodosDestinos(){ mostrarToast("🌍 Cargando todos los destinos..."); setTimeout(()=>abrirLoginModal(),600); }
-function verTodosTours(){ mostrarToast("🗺️ Cargando todos los tours..."); setTimeout(()=>abrirLoginModal(),600); }
-function verPromocion(){ mostrarToast("🔥 Cargando promociones..."); setTimeout(()=>abrirLoginModal(),600); }
-function abrirFavoritosPublico(){ mostrarToast("⭐ Inicia sesión para ver tus favoritos"); abrirLoginModal(); }
+function verTodosDestinos(){ mostrarToast("🌍 Cargando todos los destinos..."); setTimeout(()=>abrirLogin(),600); }
+function verTodosTours(){ mostrarToast("🗺️ Cargando todos los tours..."); setTimeout(()=>abrirLogin(),600); }
+function verPromocion(){ mostrarToast("🔥 Cargando promociones..."); setTimeout(()=>abrirLogin(),600); }
+function abrirFavoritosPublico(){ mostrarToast("⭐ Inicia sesión para ver tus favoritos"); abrirLogin(); }
 function scrollToSection(id){ document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); }
 
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -933,3 +897,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 </body>
 </html>
+
+
+

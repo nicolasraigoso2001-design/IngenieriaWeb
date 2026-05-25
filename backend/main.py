@@ -307,23 +307,48 @@ async def register_user(user: Usuario):
 
 # ------------------- TOURS -------------------
 
-@app.get("/tours", dependencies=[Depends(get_current_user)])
-@log_action
-async def listar_tours():
+@app.get("/tours")
+
+async def get_tours():
+
     db = SessionLocal()
-    tours_db = db.query(TourDB).all()
+
+    tours_db = db.query(
+        TourDB
+    ).all()
+
     response = []
+
     for tour in tours_db:
-        imagen = image_adapter.obtener_imagen_tour(tour.ciudad)
+
+        imagen = image_adapter.obtener_imagen_tour(
+            tour.ciudad
+        )
+
         response.append({
+
             "id": tour.id,
+
             "nombre": tour.nombre,
+
             "ciudad": tour.ciudad,
+
             "precio": tour.precio,
+
+            "descripcion": getattr(
+                tour,
+                "descripcion",
+                "Tour increíble por Colombia"
+            ),
+
             **imagen
         })
+
     db.close()
+
     return response
+#-----------------
+
 
 
 @app.post("/tours/create", dependencies=[Depends(get_current_user)], status_code=201)
@@ -721,3 +746,16 @@ async def seed_data():
 
     return {"mensaje": "Datos de ejemplo cargados correctamente"}
 
+# HOTELES
+
+@app.get("/hoteles")
+
+def obtener_hoteles():
+
+    db = SessionLocal()
+
+    hoteles = db.query(
+        HotelDB
+    ).all()
+
+    return hoteles

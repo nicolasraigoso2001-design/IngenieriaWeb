@@ -531,7 +531,7 @@ function pintarTours(data, containerId = "contenedor") {
                 <h3>${t.nombre}</h3>
                 <strong class="precio">$${Number(t.precio).toLocaleString("es-CO")}</strong>
                 <div class="card-actions">
-                    <button class="btn btn-sm btn-primary" onclick='reservarTourRapido(${t.id},"${t.nombre}")'>📅 Reservar</button>
+                    <button class="btn btn-sm btn-primary" onclick='reservarTour(${JSON.stringify(t).replace(/'/g,"&#39;")})'>📅 Reservar</button>
                     <button class="btn btn-sm btn-outline" onclick='editarTour(${t.id},"${t.nombre}","${t.ciudad}",${t.precio})'>✏️</button>
                     <button class="btn btn-sm btn-danger"  onclick='eliminarTour(${t.id})'>🗑️</button>
                     <button class="btn btn-sm ${esFav ? "btn-fav-active" : "btn-fav"}"
@@ -542,6 +542,9 @@ function pintarTours(data, containerId = "contenedor") {
         </div>`;
     });
 }
+
+
+
 
 async function filtrar() {
     const ciudad = document.getElementById("buscar")?.value || "";
@@ -668,23 +671,61 @@ async function eliminarCliente(id){
 }
 
 /* RESERVAS */
-async function cargarReservas(){
-    document.getElementById("titulo").innerText="📅 Reservas";setNavActivo("nav-reservas");
-    const[rR,rC,rT]=await Promise.all([fetchAPI("/reservas"),fetchAPI("/clientes"),fetchAPI("/tours")]);
-    if(!rR||!rC||!rT)return;
-    const reservas=await rR.json();
-    document.getElementById("contenedor").innerHTML=`
-        <div class="filtros"><button class="btn btn-primary" onclick="mostrarFormReserva()">➕ Nueva Reserva</button></div>
-        <div class="tabla-container"><table class="tabla">
-            <thead><tr><th>ID</th><th>Cliente</th><th>Tour</th><th>Acciones</th></tr></thead>
-            <tbody id="tbody-reservas"></tbody></table></div>`;
-    const tb=document.getElementById("tbody-reservas");
-    if(!reservas.length){tb.innerHTML=`<tr><td colspan="4" class="empty-state">No hay reservas</td></tr>`;return;}
-    reservas.forEach(r=>tb.innerHTML+=`<tr><td>#${r.id}</td>
-        <td>${r.cliente_nombre||"Cliente #"+r.cliente_id}</td>
-        <td>${r.tour_nombre||"Tour #"+r.tour_id}</td>
-        <td><button class="btn btn-sm btn-danger" onclick='cancelarReserva(${r.id})'>❌ Cancelar</button></td></tr>`);
+
+
+function cargarReservas(){
+
+    const reservas = JSON.parse(
+        localStorage.getItem("reservas")
+    ) || [];
+
+    let html = `
+
+        <h2 class="panel-title">
+            📅 Mis reservas
+        </h2>
+    `;
+
+    if(reservas.length === 0){
+
+        html += `
+
+            <div class="info-card">
+
+                <p>
+                    No tienes reservas todavía
+                </p>
+
+            </div>
+        `;
+
+    }else{
+
+        reservas.forEach(r => {
+
+            html += `
+
+                <div class="info-card">
+
+                    <h4>${r.nombre}</h4>
+
+                    <p>
+                        📍 ${r.ciudad}
+                    </p>
+
+                    <p>
+                        💲 ${r.precio}
+                    </p>
+
+                </div>
+            `;
+        });
+    }
+
+    abrirPanel(html);
 }
+
+
 async function mostrarFormReserva(tourIdPre=null){
     const[rC,rT]=await Promise.all([fetchAPI("/clientes"),fetchAPI("/tours")]);
     const clientes=await rC.json(),tours=await rT.json();
@@ -702,18 +743,104 @@ async function mostrarFormReserva(tourIdPre=null){
             <div class="form-actions">
                 <button class="btn btn-primary" onclick="crearReserva()">✅ Confirmar</button>
                 <button class="btn btn-outline" onclick="cargarReservas()">Cancelar</button></div></div>`;}
-async function reservarTourRapido(id){await mostrarFormReserva(id);}
+
 async function crearReserva(){
-    const cId=parseInt(document.getElementById("f-cliente").value);
-    const tId=parseInt(document.getElementById("f-tour").value);
+
+    const cId=parseInt(
+        document.getElementById("f-cliente").value
+    );
+
+    const tId=parseInt(
+        document.getElementById("f-tour").value
+    );
+
     let ok=true;
-    if(!cId){mostrarError(document.getElementById("err-cliente"),"Selecciona un cliente");ok=false;}else limpiarError(document.getElementById("err-cliente"));
-    if(!tId){mostrarError(document.getElementById("err-tour"),"Selecciona un tour");ok=false;}else limpiarError(document.getElementById("err-tour"));
+
+    if(!cId){
+
+        mostrarError(
+            document.getElementById("err-cliente"),
+            "Selecciona un cliente"
+        );
+
+        ok=false;
+
+    }else{
+
+        limpiarError(
+            document.getElementById("err-cliente")
+        );
+    }
+
+    if(!tId){
+
+        mostrarError(
+            document.getElementById("err-tour"),
+            "Selecciona un tour"
+        );
+
+        ok=false;
+
+    }else{
+
+        limpiarError(
+            document.getElementById("err-tour")
+        );
+    }
+
     if(!ok)return;
-    const res=await fetchAPI("/reservas","POST",{cliente_id:cId,tour_id:tId});if(!res)return;
+
+    const res=await fetchAPI(
+        "/reservas",
+        "POST",
+        {
+            cliente_id:cId,
+            tour_id:tId
+        }
+    );
+
+    if(!res)return;
+
     const d=await res.json();
-    if(res.ok){mostrarToast("✅ Reserva creada");cargarReservas();}else mostrarToast("❌ "+(d.detail||"Error"));
+
+    if(res.ok){
+
+        const tours = JSON.parse(
+            localStorage.getItem("tours")
+        ) || [];
+
+        const tour = tours.find(
+            t => t.id === tId
+        );
+
+        if(tour){
+
+            let reservas = JSON.parse(
+                localStorage.getItem("reservas")
+            ) || [];
+
+            reservas.push(tour);
+
+            localStorage.setItem(
+                "reservas",
+                JSON.stringify(reservas)
+            );
+        }
+
+        mostrarToast(
+            "✅ Reserva creada"
+        );
+
+        cargarReservas();
+
+    }else{
+
+        mostrarToast(
+            "❌ " + (d.detail || "Error")
+        );
+    }
 }
+
 async function cancelarReserva(id){
     if(!confirm("¿Cancelar esta reserva?"))return;
     const res=await fetchAPI(`/reservas/${id}`,"DELETE");if(!res)return;
@@ -850,3 +977,365 @@ window.onload = function () {
         if (e.key === "Enter") login();
     });
 };
+
+/* MI PERFIL */
+
+function abrirPanel(html){
+
+    const panel = document.getElementById(
+        "userPanel"
+    );
+
+    document.getElementById(
+        "panelContent"
+    ).innerHTML = html;
+
+    panel.classList.remove("hidden");
+}
+
+function cerrarPanel(){
+
+    document.getElementById(
+        "userPanel"
+    ).classList.add("hidden");
+}
+
+
+
+
+/* VER PERFIL*/
+
+function verPerfil(){
+
+    const nombre = localStorage.getItem(
+        "username"
+    ) || "Usuario";
+
+    const correo = localStorage.getItem(
+        "correo"
+    ) || "Sin correo";
+
+    const html = `
+
+        <h2 class="panel-title">
+            👤 Mi cuenta
+        </h2>
+
+        <div class="info-card">
+
+            <h4>Información personal</h4>
+
+            <p>
+                <strong>Nombre:</strong>
+                ${nombre}
+            </p>
+
+            <p>
+                <strong>Correo:</strong>
+                ${correo}
+            </p>
+
+        </div>
+    `;
+
+    abrirPanel(html);
+}
+
+/*mis favoritos*/
+
+function cargarFavoritos(){
+
+    const favoritos = JSON.parse(
+        localStorage.getItem("favoritos")
+    ) || [];
+
+    let html = `
+
+        <h2 class="panel-title">
+            ⭐ Mis favoritos
+        </h2>
+    `;
+
+    if(favoritos.length === 0){
+
+        html += `
+
+            <div class="info-card">
+
+                <p>
+                    No tienes favoritos guardados
+                </p>
+
+            </div>
+        `;
+
+    }else{
+
+        favoritos.forEach(f => {
+
+            html += `
+
+                <div class="info-card">
+
+                    <h4>${f.nombre}</h4>
+
+                    <p>
+                        📍 ${f.ciudad}
+                    </p>
+
+                    <p>
+                        💲 ${f.precio}
+                    </p>
+
+                </div>
+            `;
+        });
+    }
+
+    abrirPanel(html);
+}
+
+/**guardar favoritos */
+function guardarFavorito(tour){
+
+    const favoritos = JSON.parse(
+        localStorage.getItem("favoritos")
+    ) || [];
+
+    favoritos.push(tour);
+
+    localStorage.setItem(
+        "favoritos",
+        JSON.stringify(favoritos)
+    );
+
+    mostrarToast(
+        "⭐ Agregado a favoritos"
+    );
+}
+
+/*guardar reservas */
+
+async function reservarTourRapido(id){
+
+    await mostrarFormReserva(id);
+
+    const tours = JSON.parse(
+        localStorage.getItem("tours")
+    ) || [];
+
+    const tour = tours.find(
+        t => t.id === id
+    );
+
+    if(!tour) return;
+
+    let reservas = JSON.parse(
+        localStorage.getItem("reservas")
+    ) || [];
+
+    reservas.push(tour);
+
+    localStorage.setItem(
+        "reservas",
+        JSON.stringify(reservas)
+    );
+
+    mostrarToast(
+        "✅ Reserva agregada"
+    );
+}
+
+function cargarReservasUsuario(){
+
+    const reservas = JSON.parse(
+        localStorage.getItem("reservas")
+    ) || [];
+
+    let html = `
+
+        <h2 class="panel-title">
+            📅 Mis reservas
+        </h2>
+    `;
+
+    if(reservas.length === 0){
+
+        html += `
+
+            <div class="info-card">
+
+                <p>
+                    No tienes reservas todavía
+                </p>
+
+            </div>
+        `;
+
+    }else{
+
+        reservas.forEach(r => {
+
+            html += `
+
+                <div class="info-card">
+
+                    <h4>${r.nombre}</h4>
+
+                    <p>
+                        📍 ${r.ciudad}
+                    </p>
+
+                    <p>
+                        💲 ${Number(r.precio).toLocaleString("es-CO")}
+                    </p>
+
+                </div>
+            `;
+        });
+    }
+
+    abrirPanel(html);
+}
+
+function usuarioLogueado(){
+
+    return !!localStorage.getItem(
+        "token"
+    );
+}
+
+function abrirFavoritosProtegido(){
+
+    if(!usuarioLogueado()){
+
+        mostrarToast(
+            "🔒 Inicia sesión para ver favoritos"
+        );
+
+        abrirLogin();
+
+        return;
+    }
+
+    cargarFavoritos();
+}
+
+function abrirReservasProtegido(){
+
+    if(!usuarioLogueado()){
+
+        mostrarToast(
+            "🔒 Inicia sesión para ver reservas"
+        );
+
+        abrirLogin();
+
+        return;
+    }
+
+    cargarReservasUsuario();
+}
+
+async function cargarHoteles(){
+
+    const res = await fetchAPI(
+        "/hoteles"
+    );
+
+    const data = await res.json();
+
+    pintarTours(
+        data,
+        "contenedorHoteles"
+    );
+}
+
+
+
+async function mostrarToursPublicos(){
+
+    try{
+
+        const res = await fetch(
+            API + "/tours"
+        );
+
+        const tours = await res.json();
+
+        console.log(tours);
+
+        if(!Array.isArray(tours)){
+
+            console.error(
+                "NO ES ARRAY:",
+                tours
+            );
+
+            mostrarToast(
+                "❌ Error obteniendo tours"
+            );
+
+            return;
+        }
+
+        const container = document.getElementById(
+            "contenedorToursPublicos"
+        );
+
+        container.innerHTML = "";
+
+        tours.forEach(t => {
+
+            container.innerHTML += `
+
+            <div class="tour-card-public">
+
+                <img 
+                    src="${
+                        t.imagen ||
+                        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'
+                    }"
+                >
+
+                <div class="tour-public-body">
+
+                    <span class="badge">
+                        ${t.ciudad}
+                    </span>
+
+                    <h3>
+                        ${t.nombre}
+                    </h3>
+
+                    <p class="descripcion-card">
+                        ${
+                            t.descripcion ||
+                            "Tour increíble por Colombia"
+                        }
+                    </p>
+
+                    <div class="tour-precio">
+
+                        💲${Number(t.precio).toLocaleString("es-CO")}
+
+                    </div>
+
+                </div>
+
+            </div>
+            `;
+        });
+
+    }catch(err){
+
+        console.error(err);
+
+        mostrarToast(
+            "❌ Error cargando tours"
+        );
+    }
+}
+
+window.mostrarToursPublicos =
+mostrarToursPublicos;
