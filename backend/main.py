@@ -12,7 +12,7 @@ from fastapi import Request
 
 from database.connection import engine, Base
 Base.metadata.create_all(bind=engine)
-
+import database.seedgit add .
 
 from typing import List, Optional
 from datetime import datetime, timedelta
@@ -40,7 +40,8 @@ from database.models import (
 
 # ------------------- CONFIG -------------------
 config = AppConfig()
-
+Base.metadata.drop_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title=config.API_NAME,
     version=config.VERSION,
