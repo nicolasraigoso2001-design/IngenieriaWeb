@@ -759,3 +759,12 @@ def obtener_hoteles():
     ).all()
 
     return hoteles
+
+
+    @app.get("/test123")
+
+    async def test123():
+
+        return {
+        "message":"ESTE ES EL MAIN NUEVO"
+    }
