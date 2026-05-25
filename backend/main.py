@@ -12,7 +12,7 @@ from fastapi import Request
 
 from database.connection import engine, Base
 Base.metadata.create_all(bind=engine)
-import database.seedgit add .
+import database.seed
 
 from typing import List, Optional
 from datetime import datetime, timedelta
