@@ -12,6 +12,7 @@ from database.models import (
     TransporteDB,
     ReservaDB,
     HotelDB,
+    TourImagenDB,
 )
 
 # CREAR TABLAS
@@ -76,6 +77,65 @@ tours = [
 ]
 
 db.add_all(tours)
+
+imagenes_tours = [
+
+    TourImagenDB(
+        tour_id=1,
+        imagen="/static/images/Monserrate.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=1,
+        imagen="/static/images/bogota.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=1,
+        imagen="/static/images/Centro historico.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=2,
+        imagen="/static/images/Guatape.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=2,
+        imagen="/static/images/Comuna 13.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=2,
+        imagen="/static/images/Cafe colombiano.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=3,
+        imagen="/static/images/Ciudad amurallada.webp"
+    ),
+
+    TourImagenDB(
+        tour_id=3,
+        imagen="/static/images/Cartagena colonial.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=4,
+        imagen="/static/images/Tayrona.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=5,
+        imagen="/static/images/Amazonas rio.jpg"
+    ),
+
+    TourImagenDB(
+        tour_id=5,
+        imagen="/static/images/Tatacoa.jpg"
+    )
+]
+
 
 # =========================
 # CLIENTES
@@ -239,6 +299,7 @@ hoteles = [
         imagen="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"
     )
 ]
+
 
 
 db.add_all(tours)

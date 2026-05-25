@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, Query
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -7,6 +8,7 @@ from patterns.singleton.app_config import AppConfig
 from pydantic import BaseModel, Field, EmailStr, validator
 from jose import JWTError, jwt
 from fastapi import Request
+
 
 from database.connection import engine, Base
 Base.metadata.create_all(bind=engine)
@@ -26,12 +28,14 @@ from database.connection import SessionLocal
 from patterns.strategy.local_auth import LocalAuthStrategy
 
 from database.models import (
-    TourDB,
+    Base,
     UsuarioDB,
+    TourDB,
+    ClienteDB,
     GuiaDB,
     TransporteDB,
     ReservaDB,
-    ClienteDB
+    TourImagenDB
 )
 
 # ------------------- CONFIG -------------------
@@ -41,6 +45,17 @@ app = FastAPI(
     title=config.API_NAME,
     version=config.VERSION,
     description="API para gestión de tours, clientes, guías, transportes y reservas"
+)
+
+# 🔥 STATIC FILES
+
+app.mount(
+
+    "/static",
+
+    StaticFiles(directory="static"),
+
+    name="static"
 )
 
 app.add_middleware(
@@ -54,8 +69,11 @@ app.add_middleware(
 BASE_DIR = Path(__file__).resolve().parent
 
 app.mount(
+
     "/static",
-    StaticFiles(directory=BASE_DIR / "static"),
+
+    StaticFiles(directory="./static"),
+
     name="static"
 )
 
@@ -349,6 +367,24 @@ async def get_tours():
     return response
 #-----------------
 
+@app.get("/tours/{tour_id}/imagenes")
+
+async def obtener_imagenes_tour(
+    tour_id: int
+):
+
+    db = SessionLocal()
+
+    imagenes = db.query(
+        TourImagenDB
+    ).filter(
+        TourImagenDB.tour_id == tour_id
+    ).all()
+
+    db.close()
+
+    return imagenes
+
 
 
 @app.post("/tours/create", dependencies=[Depends(get_current_user)], status_code=201)
@@ -428,6 +464,8 @@ async def eliminar_tour(id: int):
     db.commit()
     db.close()
     return {"mensaje": "Tour eliminado"}
+
+
 
 
 # ------------------- CLIENTES -------------------
@@ -768,3 +806,22 @@ def obtener_hoteles():
         return {
         "message":"ESTE ES EL MAIN NUEVO"
     }
+
+
+@app.get("/tours/{tour_id}/imagenes")
+
+async def obtener_imagenes_tour(
+    tour_id:int
+):
+
+    db = SessionLocal()
+
+    imagenes = db.query(
+        TourImagenDB
+    ).filter(
+        TourImagenDB.tour_id == tour_id
+    ).all()
+
+    db.close()
+
+    return imagenes

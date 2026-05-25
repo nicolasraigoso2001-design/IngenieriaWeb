@@ -1263,39 +1263,28 @@ async function mostrarToursPublicos(){
 
         const tours = await res.json();
 
-        console.log(tours);
-
-        if(!Array.isArray(tours)){
-
-            console.error(
-                "NO ES ARRAY:",
-                tours
-            );
-
-            mostrarToast(
-                "❌ Error obteniendo tours"
-            );
-
-            return;
-        }
-
         const container = document.getElementById(
             "contenedorToursPublicos"
         );
 
+        if(!container)return;
+
         container.innerHTML = "";
 
-        tours.forEach(t => {
+       const toursVisibles = tours.slice(0,4);
+
+        toursVisibles.forEach(t => {
 
             container.innerHTML += `
 
-            <div class="tour-card-public">
+            <div 
+                class="tour-card-public"
+                onclick='abrirDetalleTour(${JSON.stringify(t).replace(/'/g,"&#39;")})'
+            >
 
                 <img 
-                    src="${
-                        t.imagen ||
-                        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'
-                    }"
+                   src="${API}${encodeURI(img.imagen)}"
+                    onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
                 >
 
                 <div class="tour-public-body">
@@ -1311,7 +1300,7 @@ async function mostrarToursPublicos(){
                     <p class="descripcion-card">
                         ${
                             t.descripcion ||
-                            "Tour increíble por Colombia"
+                            "Explora destinos increíbles en Colombia"
                         }
                     </p>
 
@@ -1321,10 +1310,36 @@ async function mostrarToursPublicos(){
 
                     </div>
 
+                    <div class="tour-actions">
+
+                        <button 
+                            class="btn-reservar"
+                            onclick='reservarTourRapido(${t.id})'
+                        >
+                            📅 Reservar
+                        </button>
+
+                        <button 
+                            class="btn-favorito"
+                            onclick='toggleFavorito(${JSON.stringify(t).replace(/'/g,"&#39;")})'
+                        >
+                            ❤️
+                        </button>
+
+                    </div>
+
                 </div>
 
             </div>
             `;
+        });
+
+        // 🔥 SCROLL AUTOMÁTICO
+
+        document.getElementById(
+            "contenedorToursPublicos"
+        ).scrollIntoView({
+            behavior:"smooth"
         });
 
     }catch(err){
@@ -1337,5 +1352,239 @@ async function mostrarToursPublicos(){
     }
 }
 
-window.mostrarToursPublicos =
-mostrarToursPublicos;
+function abrirDetalleTour(tour){
+
+    const modal = document.createElement(
+        "div"
+    );
+
+    modal.className = "tour-detail-overlay";
+
+    modal.innerHTML = `
+
+        <div class="tour-detail-modal">
+
+            <button 
+                class="close-detail"
+                onclick="this.parentElement.parentElement.remove()"
+            >
+                ✖
+            </button>
+
+            <div 
+                class="detail-gallery"
+                id="detailGallery"
+            ></div>
+
+            <div class="detail-content">
+
+                <span class="badge">
+                    ${tour.ciudad}
+                </span>
+
+                <h2>
+                    ${tour.nombre}
+                </h2>
+
+                <p class="detail-description">
+                    ${
+                        tour.descripcion ||
+                        "Explora uno de los mejores destinos turísticos de Colombia."
+                    }
+                </p>
+
+                <div class="detail-price">
+
+                    💲${Number(tour.precio).toLocaleString("es-CO")}
+
+                </div>
+
+                <div class="detail-actions">
+
+                    <button 
+                        class="btn-reservar"
+                        onclick='reservarTourRapido(${tour.id})'
+                    >
+                        📅 Reservar
+                    </button>
+
+                    <button 
+                        class="btn-favorito"
+                        onclick='toggleFavorito(${JSON.stringify(tour).replace(/'/g,"&#39;")})'
+                    >
+                        ❤️ Favorito
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(
+        modal
+    );
+
+    cargarImagenesTour(
+        tour.id
+    );
+}
+
+async function mostrarTodosTours(){
+
+    try{
+
+        const res = await fetch(
+            API + "/tours"
+        );
+
+        const tours = await res.json();
+
+        const container = document.getElementById(
+            "contenedorToursPublicos"
+        );
+
+        container.innerHTML = "";
+
+        tours.forEach(t => {
+
+            const imagen = t.imagen
+            ? `${API}${encodeURI(t.imagen)}`
+            : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500";
+
+            container.innerHTML += `
+
+            <div class="tour-card-public">
+
+               <img 
+                src="${imagen}"
+                onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
+            >
+
+                <div class="tour-public-body">
+
+                    <span class="badge">
+                        ${t.ciudad}
+                    </span>
+
+                    <h3>
+                        ${t.nombre}
+                    </h3>
+
+                    <p class="descripcion-card">
+                        ${
+                            t.descripcion ||
+                            "Explora Colombia"
+                        }
+                    </p>
+
+                    <div class="tour-precio">
+
+                        💲${Number(t.precio).toLocaleString("es-CO")}
+
+                    </div>
+
+                    <div class="tour-actions">
+
+                        <button 
+                            class="btn-reservar"
+                            onclick='reservarTourRapido(${t.id})'
+                        >
+                            📅 Reservar
+                        </button>
+
+                        <button 
+                            class="btn-favorito"
+                            onclick='toggleFavorito(${JSON.stringify(t).replace(/'/g,"&#39;")})'
+                        >
+                            ❤️
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+            `;
+        });
+
+        document.getElementById(
+            "contenedorToursPublicos"
+        ).scrollIntoView({
+            behavior:"smooth"
+        });
+
+    }catch(err){
+
+        console.error(err);
+    }
+}
+
+async function cargarImagenesTour(
+    tourId
+){
+
+    try{
+
+        const res = await fetch(
+            API + `/tours/${tourId}/imagenes`
+        );
+
+        const imagenes = await res.json();
+
+        console.log(
+            "IMAGENES:",
+            imagenes
+        );
+
+        const gallery = document.getElementById(
+            "detailGallery"
+        );
+
+        if(!gallery)return;
+
+        gallery.innerHTML = "";
+
+        if(
+            !Array.isArray(imagenes) ||
+            imagenes.length === 0
+        ){
+
+            gallery.innerHTML = `
+
+                <img 
+                    src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500"
+                    class="gallery-image"
+                >
+            `;
+
+            return;
+        }
+
+        imagenes.forEach(img => {
+
+            const imagenUrl = img.imagen
+
+            ? `${API}${encodeURI(img.imagen)}`
+
+            : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500";
+
+            gallery.innerHTML += `
+
+                <img 
+                    src="${imagenUrl}"
+                    class="gallery-image"
+                    onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
+                >
+            `;
+        });
+
+    }catch(err){
+
+        console.error(
+            "ERROR GALERIA:",
+            err
+        );
+    }
+}

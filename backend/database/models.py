@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from database.connection import Base
-
+from sqlalchemy import ForeignKey
 
 class UsuarioDB(Base):
 
@@ -112,3 +112,21 @@ class HotelDB(Base):
     imagen = Column(String)
 
     precio = Column(Float)
+
+
+class TourImagenDB(Base):
+
+    __tablename__ = "tour_imagenes"
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
+
+    tour_id = Column(
+        Integer,
+        ForeignKey("tours.id")
+    )
+
+    imagen = Column(String)
