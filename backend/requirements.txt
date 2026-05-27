@@ -9,3 +9,5 @@ python-jose[cryptography]
 jinja2
 pymysql
 sqlalchemy
+email-validator
+passlib[bcrypt]
