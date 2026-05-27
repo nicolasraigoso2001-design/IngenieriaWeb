@@ -93,7 +93,7 @@
 
             <button 
                 class="nav-btn"
-                onclick="mostrarToursPublicos()"
+                onclick="abrirSeccionTours()"
             >
                 📍 Tours
             </button>
@@ -289,19 +289,28 @@
     id="contenedorToursPublicos"
     ></div>
 
-    <div class="ver-todos-wrap">
+   <div class="ver-todos-wrap">
 
     <button 
         class="btn-ver-todos"
+        id="btnVerTours"
         onclick="mostrarTodosTours()"
     >
         Ver todos los tours →
     </button>
 
+    <button 
+        class="btn-ver-todos"
+        id="btnVerMenosTours"
+        onclick="mostrarMenosTours()"
+        style="display:none;"
+    >
+        Ver menos ↑
+    </button>
+
 </div>
 
 </section>
-
 
 
 
@@ -378,6 +387,26 @@
         </div>
 
     </div>
+
+</section>
+
+<!-- ================= hoteles================= -->
+
+
+<section class="section">
+
+    <div class="section-header">
+
+        <h2>
+            🏨 Hoteles en Colombia
+        </h2>
+
+    </div>
+
+    <div 
+        class="cards-grid"
+        id="contenedorHoteles"
+    ></div>
 
 </section>
 
@@ -502,6 +531,7 @@
                 Iniciar sesión
             </button>
 
+
             <button 
                 id="registerTab"
                 class="auth-tab"
@@ -511,6 +541,8 @@
             </button>
 
         </div>
+
+        
 
         <!-- LOGIN -->
 
@@ -574,7 +606,10 @@
 
             <div class="auth-links">
 
-            <a href="#" onclick="mostrarToast('📧 Recuperación próximamente')">
+            <a 
+                href="#"
+                onclick="abrirRecuperarCuenta()"
+            >
                 ¿Olvidaste tu contraseña?
             </a>
 
@@ -582,14 +617,64 @@
                 Crear cuenta
             </a>
 
-</div>
+            </div>
 
 
 
             
 
+    </div>
+
+
+
+    <!-- RECUPERAR CUENTA -->
+
+<div 
+    class="auth-modal hidden"
+    id="recoverModal"
+>
+
+    <div class="auth-box">
+
+        <button 
+            class="close-auth"
+            onclick="cerrarRecuperarCuenta()"
+        >
+            ✖
+        </button>
+
+        <h2>
+            🔑 Recuperar cuenta
+        </h2>
+
+        <p class="recover-text">
+            Ingresa tu correo registrado.
+        </p>
+
+        <div class="form-group">
+
+            <label>
+                Correo electrónico
+            </label>
+
+            <input 
+                type="email"
+                id="recoverEmail"
+                placeholder="correo@gmail.com"
+            >
+
         </div>
 
+        <button 
+            class="main-auth-btn"
+            onclick="recuperarCuenta()"
+        >
+            Recuperar cuenta
+        </button>
+
+    </div>
+
+</div>
         <!-- REGISTER -->
 
 <div 

@@ -1,7 +1,7 @@
 from database.connection import SessionLocal, engine
 
 
-
+from database.models import HotelDB
 from database.models import (
     
     Base,
@@ -37,46 +37,16 @@ admin = UsuarioDB(
     password="123"
 )
 
-db.add(admin)
+if not db.query(UsuarioDB).first():
+
+    db.add(admin)
 
 # =========================
 # TOURS
 # =========================
 
-tours = [
 
-    TourDB(
-        nombre="Tour Monserrate",
-        ciudad="Bogotá",
-        precio=50000
-    ),
 
-    TourDB(
-        nombre="Tour Guatapé y Piedra del Peñol",
-        ciudad="Medellín",
-        precio=120000
-    ),
-
-    TourDB(
-        nombre="Tour Ciudad Amurallada",
-        ciudad="Cartagena",
-        precio=95000
-    ),
-
-    TourDB(
-        nombre="Tour Parque Tayrona",
-        ciudad="Santa Marta",
-        precio=140000
-    ),
-
-    TourDB(
-        nombre="Tour Eje Cafetero",
-        ciudad="Armenia",
-        precio=110000
-    )
-]
-
-db.add_all(tours)
 
 imagenes_tours = [
 
@@ -154,7 +124,9 @@ clientes = [
     )
 ]
 
-db.add_all(clientes)
+if not db.query(ClienteDB).first():
+
+    db.add_all(clientes)
 
 # =========================
 # GUIAS
@@ -178,7 +150,9 @@ guias = [
     )
 ]
 
-db.add_all(guias)
+if not db.query(GuiaDB).first():
+
+    db.add_all(guias)
 
 # =========================
 # TRANSPORTES
@@ -205,7 +179,9 @@ transportes = [
     )
 ]
 
-db.add_all(transportes)
+if not db.query(TransporteDB).first():
+
+    db.add_all(transportes)
 
 # =========================
 # RESERVAS
@@ -275,54 +251,156 @@ hoteles = [
 
     HotelDB(
 
+        nombre="Hotel Monserrate Premium",
+
+        ciudad="Bogotá",
+
+        precio=320000,
+
+        descripcion="Vista panorámica de Bogotá y desayuno incluido.",
+
+        imagen="/static/images/hotel-bogota.jpg",
+
+        estrellas=5
+    ),
+
+    HotelDB(
+
+        nombre="Andes Plaza Suites",
+
+        ciudad="Bogotá",
+
+        precio=270000,
+
+        descripcion="Hotel ejecutivo cerca del centro histórico.",
+
+        imagen="/static/images/hotel-bogota2.jpg",
+
+        estrellas=4
+    ),
+
+    HotelDB(
+
+        nombre="Hotel Medellín Urban",
+
+        ciudad="Medellín",
+
+        precio=350000,
+
+        descripcion="Ubicación premium y rooftop con vista.",
+
+        imagen="/static/images/hotel-medellin.jpg",
+
+        estrellas=5
+    ),
+
+    HotelDB(
+
+        nombre="Guatapé Lake Resort",
+
+        ciudad="Medellín",
+
+        precio=410000,
+
+        descripcion="Experiencia de lujo cerca de Guatapé.",
+
+        imagen="/static/images/hotel-medellin2.jpg",
+
+        estrellas=5
+    ),
+
+    HotelDB(
+
         nombre="Hotel Caribe Luxury",
 
         ciudad="Cartagena",
 
         precio=420000,
 
-        descripcion="Hotel 5 estrellas frente al mar.",
+        descripcion="Hotel frente al mar y ciudad amurallada.",
 
-        imagen="https://images.unsplash.com/photo-1566073771259-6a8506099945"
+        imagen="/static/images/hotel-cartagena.jpg",
+
+        estrellas=5
     ),
 
     HotelDB(
 
-        nombre="Hotel Andes Plaza",
+        nombre="Cartagena Colonial Inn",
 
-        ciudad="Bogotá",
+        ciudad="Cartagena",
 
-        precio=310000,
+        precio=295000,
 
-        descripcion="Vista premium y desayuno incluido.",
+        descripcion="Ambiente colonial en el centro histórico.",
 
-        imagen="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"
+        imagen="/static/images/hotel-cartagena2.jpg",
+
+        estrellas=4
+    ),
+
+    HotelDB(
+
+        nombre="Tayrona Eco Resort",
+
+        ciudad="Santa Marta",
+
+        precio=390000,
+
+        descripcion="Naturaleza y descanso cerca del Tayrona.",
+
+        imagen="/static/images/hotel-santamarta.jpg",
+
+        estrellas=5
+    ),
+
+    HotelDB(
+
+        nombre="Coffee Paradise Hotel",
+
+        ciudad="Armenia",
+
+        precio=280000,
+
+        descripcion="Experiencia cafetera y paisajes únicos.",
+
+        imagen="/static/images/hotel-armenia.jpg",
+
+        estrellas=4
     )
 ]
 
 
 
-db.add_all(tours)
+# =========================
+# IMÁGENES TOURS
+# =========================
 
-db.add_all(hoteles)
+if not db.query(TourImagenDB).first():
 
-db.add_all(clientes)
+    db.add_all(imagenes_tours)
 
-db.add_all(guias)
+# =========================
+# HOTELES
+# =========================
 
-db.add_all(transportes)
+if not db.query(HotelDB).first():
 
-db.add_all(reservas)
+    db.add_all(hoteles)
 
-# GUARDAR
+# =========================
+# TOURS
+# =========================
+
+if not db.query(TourDB).filter(
+    TourDB.nombre == "Tour Cartagena Premium"
+).first():
+
+    db.add_all(tours)
+
+
 db.commit()
 
 db.close()
 
 print("✅ Base de datos creada correctamente")
-
-
-# GUARDAR
-db.commit()
-
-db.close()

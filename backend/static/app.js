@@ -36,7 +36,11 @@ function abrirLogin() {
 
     mostrarLogin();
 }
-function abrirLoginModal() { abrirLogin(); }  // alias
+function abrirLoginModal() {
+    abrirLogin();
+}
+
+
 
 function cerrarLogin() {
 
@@ -1237,19 +1241,7 @@ function abrirReservasProtegido(){
     cargarReservasUsuario();
 }
 
-async function cargarHoteles(){
 
-    const res = await fetchAPI(
-        "/hoteles"
-    );
-
-    const data = await res.json();
-
-    pintarTours(
-        data,
-        "contenedorHoteles"
-    );
-}
 
 
 
@@ -1479,22 +1471,29 @@ async function mostrarTodosTours(){
             "contenedorToursPublicos"
         );
 
+        if(!container)return;
+
         container.innerHTML = "";
 
         tours.forEach(t => {
 
             const imagen = t.imagen
+
             ? `${API}${encodeURI(t.imagen)}`
+
             : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500";
 
             container.innerHTML += `
 
-            <div class="tour-card-public">
-
-               <img 
-                src="${imagen}"
-                onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
+            <div 
+                class="tour-card-public"
+                onclick='abrirDetalleTour(${JSON.stringify(t).replace(/'/g,"&#39;")})'
             >
+
+                <img 
+                    src="${imagen}"
+                    onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
+                >
 
                 <div class="tour-public-body">
 
@@ -1523,14 +1522,14 @@ async function mostrarTodosTours(){
 
                         <button 
                             class="btn-reservar"
-                            onclick='reservarTourRapido(${t.id})'
+                            onclick='event.stopPropagation(); reservarTourRapido(${t.id})'
                         >
                             📅 Reservar
                         </button>
 
                         <button 
                             class="btn-favorito"
-                            onclick='toggleFavorito(${JSON.stringify(t).replace(/'/g,"&#39;")})'
+                            onclick='event.stopPropagation(); toggleFavorito(${JSON.stringify(t).replace(/'/g,"&#39;")})'
                         >
                             ❤️
                         </button>
@@ -1543,16 +1542,45 @@ async function mostrarTodosTours(){
             `;
         });
 
-        document.getElementById(
-            "contenedorToursPublicos"
-        ).scrollIntoView({
-            behavior:"smooth"
-        });
+        // 🔥 CAMBIAR BOTÓN
 
-    }catch(err){
+        document.getElementById(
+            "btnVerTours"
+        ).style.display = "none";
+
+        document.getElementById(
+            "btnVerMenosTours"
+        ).style.display = "inline-flex";
+            }catch(err){
 
         console.error(err);
     }
+}
+
+
+async function mostrarMenosTours(){
+
+    await mostrarToursPublicos();
+
+    // 🔥 MOSTRAR BOTÓN VER TODOS
+
+    document.getElementById(
+        "btnVerTours"
+    ).style.display = "inline-flex";
+
+    // 🔥 OCULTAR BOTÓN VER MENOS
+
+    document.getElementById(
+        "btnVerMenosTours"
+    ).style.display = "none";
+
+    // 🔥 SCROLL SUAVE
+
+    document.getElementById(
+        "contenedorToursPublicos"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
 }
 
 async function cargarImagenesTour(
@@ -1622,3 +1650,154 @@ async function cargarImagenesTour(
         );
     }
 }
+
+function abrirRecuperarCuenta(){
+
+    document.getElementById(
+        "recoverModal"
+    ).classList.remove(
+        "hidden"
+    );
+}
+
+function cerrarRecuperarCuenta(){
+
+    document.getElementById(
+        "recoverModal"
+    ).classList.add(
+        "hidden"
+    );
+}
+
+async function recuperarCuenta(){
+
+    const correo = document.getElementById(
+        "recoverEmail"
+    ).value.trim();
+
+    if(!correo){
+
+        mostrarToast(
+            "⚠️ Ingresa tu correo"
+        );
+
+        return;
+    }
+
+    mostrarToast(
+        "✅ Te enviamos instrucciones al correo"
+    );
+
+    cerrarRecuperarCuenta();
+}
+
+async function abrirSeccionTours(){
+
+    await mostrarToursPublicos();
+
+    document.getElementById(
+        "contenedorToursPublicos"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+async function cargarHoteles(){
+
+    try{
+
+        const res = await fetch(
+            API + "/hoteles"
+        );
+
+        const hoteles = await res.json();
+
+        const container = document.getElementById(
+            "contenedorHoteles"
+        );
+
+        if(!container)return;
+
+        container.innerHTML = "";
+
+        hoteles.forEach(h => {
+
+            const estrellas = "⭐".repeat(
+                h.estrellas || 4
+            );
+
+            container.innerHTML += `
+
+            <div class="tour-card-public">
+
+                <img 
+                    src="${API}${h.imagen}"
+                    onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500'"
+                >
+
+                <div class="tour-public-body">
+
+                    <span class="badge">
+                        ${h.ciudad}
+                    </span>
+
+                    <h3>
+                        ${h.nombre}
+                    </h3>
+
+                    <div class="hotel-stars">
+
+                        ${estrellas}
+
+                    </div>
+
+                    <p class="descripcion-card">
+                        ${
+                            h.descripcion ||
+                            "Hotel premium en Colombia"
+                        }
+                    </p>
+
+                    <div class="tour-precio">
+
+                        💲${Number(h.precio).toLocaleString("es-CO")}
+                        / noche
+                    </div>
+
+                    <div class="tour-actions">
+
+                        <button 
+                            class="btn-reservar"
+                        >
+                            🏨 Reservar
+                        </button>
+
+                        <button 
+                            class="btn-favorito"
+                        >
+                            ❤️
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+            `;
+        });
+
+    }catch(err){
+
+        console.error(err);
+    }
+}
+
+window.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        await mostrarToursPublicos();
+
+        await cargarHoteles();
+    }
+);

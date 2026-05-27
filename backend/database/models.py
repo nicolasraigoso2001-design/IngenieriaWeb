@@ -93,25 +93,7 @@ class TourDB(Base):
 
     categoria = Column(String)
 
-class HotelDB(Base):
 
-    __tablename__ = "hoteles"
-
-    id = Column(
-        Integer,
-        primary_key=True,
-        index=True
-    )
-
-    nombre = Column(String)
-
-    ciudad = Column(String)
-
-    descripcion = Column(String)
-
-    imagen = Column(String)
-
-    precio = Column(Float)
 
 
 class TourImagenDB(Base):
@@ -130,3 +112,27 @@ class TourImagenDB(Base):
     )
 
     imagen = Column(String)
+
+
+
+class HotelDB(Base):
+
+    __tablename__ = "hoteles"
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
+
+    nombre = Column(String)
+
+    ciudad = Column(String)
+
+    precio = Column(Float)
+
+    descripcion = Column(String)
+
+    imagen = Column(String)
+
+    estrellas = Column(Integer)

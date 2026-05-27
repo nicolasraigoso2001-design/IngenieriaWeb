@@ -34,7 +34,8 @@ from database.models import (
     GuiaDB,
     TransporteDB,
     ReservaDB,
-    TourImagenDB
+    TourImagenDB,
+    HotelDB,
 )
 
 # ------------------- CONFIG -------------------
@@ -792,7 +793,7 @@ async def seed_data():
 
 @app.get("/hoteles")
 
-def obtener_hoteles():
+async def get_hoteles():
 
     db = SessionLocal()
 
@@ -800,16 +801,30 @@ def obtener_hoteles():
         HotelDB
     ).all()
 
-    return hoteles
+    response = []
 
+    for hotel in hoteles:
 
-    @app.get("/test123")
+        response.append({
 
-    async def test123():
+            "id": hotel.id,
 
-        return {
-        "message":"ESTE ES EL MAIN NUEVO"
-    }
+            "nombre": hotel.nombre,
+
+            "ciudad": hotel.ciudad,
+
+            "precio": hotel.precio,
+
+            "descripcion": hotel.descripcion,
+
+            "imagen": hotel.imagen,
+
+            "estrellas": hotel.estrellas
+        })
+
+    db.close()
+
+    return response
 
 
 @app.get("/tours/{tour_id}/imagenes")
