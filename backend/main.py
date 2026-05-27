@@ -844,3 +844,31 @@ async def obtener_imagenes_tour(
     db.close()
 
     return imagenes
+
+
+    @app.get("/usuarios")
+
+async def ver_usuarios():
+
+    db = SessionLocal()
+
+    usuarios = db.query(
+        UsuarioDB
+    ).all()
+
+    response = []
+
+    for u in usuarios:
+
+        response.append({
+
+            "id": u.id,
+
+            "correo": u.correo,
+
+            "nombres": u.nombres
+        })
+
+    db.close()
+
+    return response
