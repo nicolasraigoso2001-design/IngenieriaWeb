@@ -356,10 +356,14 @@ async def get_tours():
             "descripcion": getattr(
                 tour,
                 "descripcion",
-                "Tour increíble por Colombia"
+                "Explora Colombia"
             ),
 
-            **imagen
+            "imagen": imagen["imagen"],
+
+            "galeria": image_adapter.obtener_galeria_tour(
+                tour.ciudad
+            )
         })
 
     db.close()

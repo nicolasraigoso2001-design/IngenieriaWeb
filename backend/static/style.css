@@ -1915,3 +1915,27 @@ body{
 
     flex-shrink:0;
 }
+
+.detail-gallery{
+
+    display:flex;
+
+    gap:12px;
+
+    overflow-x:auto;
+
+    padding:20px;
+}
+
+.gallery-image{
+
+    width:320px;
+
+    height:240px;
+
+    object-fit:cover;
+
+    border-radius:18px;
+
+    flex-shrink:0;
+}

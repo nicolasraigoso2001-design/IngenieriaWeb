@@ -1,26 +1,105 @@
-from pathlib import Path
-
 class ImageAdapter:
 
-    def __init__(self):
+    def normalizar_ciudad(
+        self,
+        ciudad
+    ):
 
-        self.images = {
-            "Bogotá": "/static/images/bogota.jpg",
-            "Cartagena": "/static/images/cartagena.jpg",
-            "Medellín": "/static/images/medellin.jpg",
-            "Santa Marta": "/static/images/santamarta.jpg",
-            "Huila": "/static/images/huila.jpg",
-            "Armenia": "/static/images/armenia.jpg",
-            "Leticia": "/static/images/amazonas.jpg"
-        }
+        return ciudad.lower().strip()
 
-    def obtener_imagen_tour(self, ciudad):
+    # 🔥 IMAGEN PRINCIPAL
 
-        imagen = self.images.get(
-            ciudad,
-            "/static/images/default.jpg"
+    def obtener_imagen_tour(
+        self,
+        ciudad
+    ):
+
+        ciudad = self.normalizar_ciudad(
+            ciudad
         )
 
-        return {
-            "imagen": imagen
+        imagenes = {
+
+            "bogotá":
+            "/static/images/Monserrate.jpg",
+
+            "medellín":
+            "/static/images/Comuna 13.jpg",
+
+            "cartagena":
+            "/static/images/Ciudad amurallada.webp",
+
+            "santa marta":
+            "/static/images/Tayrona.jpg",
+
+            "armenia":
+            "/static/images/Cafe colombiano.jpg",
+
+            "pereira":
+            "/static/images/Cafe colombiano.jpg"
         }
+
+        return {
+
+            "imagen": imagenes.get(
+                ciudad,
+                "/static/images/bogota.jpg"
+            )
+        }
+
+    # 🔥 GALERÍA
+
+    def obtener_galeria_tour(
+        self,
+        ciudad
+    ):
+
+        ciudad = self.normalizar_ciudad(
+            ciudad
+        )
+
+        galerias = {
+
+            "bogotá":[
+
+                "/static/images/Monserrate.jpg",
+
+                "/static/images/Centro historico.jpg",
+
+                "/static/images/bogota.jpg"
+            ],
+
+            "medellín":[
+
+                "/static/images/Comuna 13.jpg",
+
+                "/static/images/Guatape.jpg"
+            ],
+
+            "cartagena":[
+
+                "/static/images/Ciudad amurallada.webp",
+
+                "/static/images/Cartagena colonial.jpg"
+            ],
+
+            "santa marta":[
+
+                "/static/images/Tayrona.jpg"
+            ],
+
+            "armenia":[
+
+                "/static/images/Cafe colombiano.jpg"
+            ],
+
+            "pereira":[
+
+                "/static/images/Cafe colombiano.jpg"
+            ]
+        }
+
+        return galerias.get(
+            ciudad,
+            ["/static/images/bogota.jpg"]
+        )

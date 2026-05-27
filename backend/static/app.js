@@ -1263,6 +1263,20 @@ async function mostrarToursPublicos(){
 
         const tours = await res.json();
 
+        console.log(
+            "TOURS:",
+            tours
+        );
+
+        if(!Array.isArray(tours)){
+
+            mostrarToast(
+                "❌ Error cargando tours"
+            );
+
+            return;
+        }
+
         const container = document.getElementById(
             "contenedorToursPublicos"
         );
@@ -1271,9 +1285,15 @@ async function mostrarToursPublicos(){
 
         container.innerHTML = "";
 
-       const toursVisibles = tours.slice(0,4);
+        const toursVisibles = tours.slice(0,4);
 
         toursVisibles.forEach(t => {
+
+            const imagen = t.imagen
+
+            ? `${API}${encodeURI(t.imagen)}`
+
+            : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500";
 
             container.innerHTML += `
 
@@ -1283,7 +1303,7 @@ async function mostrarToursPublicos(){
             >
 
                 <img 
-                   src="${API}${encodeURI(img.imagen)}"
+                    src="${imagen}"
                     onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
                 >
 
@@ -1314,14 +1334,14 @@ async function mostrarToursPublicos(){
 
                         <button 
                             class="btn-reservar"
-                            onclick='reservarTourRapido(${t.id})'
+                            onclick='event.stopPropagation(); reservarTourRapido(${t.id})'
                         >
                             📅 Reservar
                         </button>
 
                         <button 
                             class="btn-favorito"
-                            onclick='toggleFavorito(${JSON.stringify(t).replace(/'/g,"&#39;")})'
+                            onclick='event.stopPropagation(); toggleFavorito(${JSON.stringify(t).replace(/'/g,"&#39;")})'
                         >
                             ❤️
                         </button>
@@ -1334,23 +1354,19 @@ async function mostrarToursPublicos(){
             `;
         });
 
-        // 🔥 SCROLL AUTOMÁTICO
-
-        document.getElementById(
-            "contenedorToursPublicos"
-        ).scrollIntoView({
-            behavior:"smooth"
-        });
-
     }catch(err){
 
-        console.error(err);
+        console.error(
+            "ERROR TOURS:",
+            err
+        );
 
         mostrarToast(
             "❌ Error cargando tours"
         );
     }
 }
+
 
 function abrirDetalleTour(tour){
 
@@ -1359,6 +1375,25 @@ function abrirDetalleTour(tour){
     );
 
     modal.className = "tour-detail-overlay";
+
+    let galeriaHTML = "";
+
+    if(
+        Array.isArray(tour.galeria)
+    ){
+
+        tour.galeria.forEach(img => {
+
+            galeriaHTML += `
+
+                <img 
+                    src="${API}${encodeURI(img)}"
+                    class="gallery-image"
+                    onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
+                >
+            `;
+        });
+    }
 
     modal.innerHTML = `
 
@@ -1371,10 +1406,11 @@ function abrirDetalleTour(tour){
                 ✖
             </button>
 
-            <div 
-                class="detail-gallery"
-                id="detailGallery"
-            ></div>
+            <div class="detail-gallery">
+
+                ${galeriaHTML}
+
+            </div>
 
             <div class="detail-content">
 
@@ -1389,7 +1425,7 @@ function abrirDetalleTour(tour){
                 <p class="detail-description">
                     ${
                         tour.descripcion ||
-                        "Explora uno de los mejores destinos turísticos de Colombia."
+                        "Explora destinos increíbles de Colombia."
                     }
                 </p>
 
@@ -1425,11 +1461,9 @@ function abrirDetalleTour(tour){
     document.body.appendChild(
         modal
     );
-
-    cargarImagenesTour(
-        tour.id
-    );
 }
+
+
 
 async function mostrarTodosTours(){
 
