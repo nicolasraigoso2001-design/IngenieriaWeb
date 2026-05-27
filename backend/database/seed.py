@@ -209,6 +209,71 @@ tours = [
 
     TourDB(
 
+        nombre="Tour Monserrate",
+
+        ciudad="Bogotá",
+
+        precio=50000,
+
+        descripcion="Disfruta la mejor vista panorámica de Bogotá.",
+
+        imagen="/static/images/Monserrate.jpg"
+    ),
+
+    TourDB(
+
+        nombre="Tour Guatapé y Piedra del Peñol",
+
+        ciudad="Medellín",
+
+        precio=120000,
+
+        descripcion="Explora Guatapé y sus paisajes únicos.",
+
+        imagen="/static/images/Guatape.jpg"
+    ),
+
+    TourDB(
+
+        nombre="Tour Ciudad Amurallada",
+
+        ciudad="Cartagena",
+
+        precio=95000,
+
+        descripcion="Recorre la histórica ciudad amurallada.",
+
+        imagen="/static/images/Ciudad amurallada.webp"
+    ),
+
+    TourDB(
+
+        nombre="Tour Parque Tayrona",
+
+        ciudad="Santa Marta",
+
+        precio=140000,
+
+        descripcion="Naturaleza y playas paradisíacas.",
+
+        imagen="/static/images/Tayrona.jpg"
+    ),
+
+    TourDB(
+
+        nombre="Tour Eje Cafetero",
+
+        ciudad="Armenia",
+
+        precio=110000,
+
+        descripcion="Vive la experiencia cafetera colombiana.",
+
+        imagen="/static/images/Cafe colombiano.jpg"
+    ),
+
+    TourDB(
+
         nombre="Tour Cartagena Premium",
 
         ciudad="Cartagena",
@@ -217,7 +282,7 @@ tours = [
 
         descripcion="Disfruta playas, ciudad amurallada y gastronomía.",
 
-        imagen="https://images.unsplash.com/photo-1519046904884-53103b34b206"
+        imagen="/static/images/Cartagena colonial.jpg"
     ),
 
     TourDB(
@@ -230,7 +295,7 @@ tours = [
 
         descripcion="Paisajes cafeteros y fincas tradicionales.",
 
-        imagen="https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+        imagen="/static/images/Cafe colombiano.jpg"
     ),
 
     TourDB(
@@ -243,7 +308,7 @@ tours = [
 
         descripcion="Comuna 13, metro cable y cultura paisa.",
 
-        imagen="https://images.unsplash.com/photo-1544986581-efac024faf62"
+        imagen="/static/images/Comuna 13.jpg"
     )
 ]
 
