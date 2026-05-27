@@ -846,7 +846,7 @@ async def obtener_imagenes_tour(
     return imagenes
 
 
-    @app.get("/usuarios")
+@app.get("/usuarios")
 
 async def ver_usuarios():
 
