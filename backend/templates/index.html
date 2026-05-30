@@ -121,77 +121,124 @@
     </nav>
 
     <!-- CONTENIDO HERO -->
-    <div class="hero-content">
+<!-- CONTENIDO HERO -->
+<div class="hero-content">
 
-        <h1>Descubre Colombia</h1>
+    <h1>Descubre Colombia</h1>
 
-        <p>
-            Los mejores destinos, hoteles y tours al mejor precio
-        </p>
+    <p>
+        Los mejores destinos, hoteles y tours al mejor precio
+    </p>
 
-        <!-- BUSCADOR -->
-        <div class="search-box">
+    <!-- BUSCADOR -->
+    <div class="search-box">
 
-            <div class="tabs">
+        <div class="tabs">
 
-                <button class="tab">
-                    🏨🚗Transporte + Hotel
-                </button>
+            <button class="tab">
+                🏨🚗 Transporte + Hotel
+            </button>
 
-                <button class="tab">
-                    🏨 Solo Hotel
-                </button>
+            <button class="tab">
+                🏨 Solo Hotel
+            </button>
 
-                <button class="tab">
-                    🚗 Solo Transporte
-                </button>
+            <button class="tab">
+                🚗 Solo Transporte
+            </button>
+
+        </div>
+
+        <div class="search-grid">
+
+            <div class="field">
+
+                <label>Origen</label>
+
+                <input
+                    type="text"
+                    id="origen"
+                    value="Bogotá (BOG)"
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label>Destino</label>
+
+                <input
+                    type="text"
+                    id="destino"
+                    list="listaDestinos"
+                    placeholder="¿A dónde vas?"
+>
 
             </div>
 
-            <div class="search-grid">
+            <div class="field">
 
-                <div class="field">
-                    <label>Origen</label>
-                    <input type="text" value="Bogotá (BOG)">
-                </div>
+                <label>Salida</label>
 
-                <div class="field">
-                    <label>Destino</label>
-                    <input type="text" placeholder="¿A dónde vas?">
-                </div>
-
-                <div class="field">
-                    <label>Salida</label>
-                    <input type="date">
-                </div>
-
-                <div class="field">
-                    <label>Regreso</label>
-                    <input type="date">
-                </div>
-
-                <div class="field">
-                    <label>Pasajeros</label>
-
-                    <select>
-                        <option>1 adulto</option>
-                        <option>2 adultos</option>
-                        <option>Familia</option>
-                    </select>
-                </div>
-
-                <button class="btn-search" onclick="buscarViajes()">
-                    🔍 Buscar
-                </button>
+                <input
+                    type="date"
+                    id="fechaSalida"
+                >
 
             </div>
+
+            <div class="field">
+
+                <label>Regreso</label>
+
+                <input
+                    type="date"
+                    id="fechaRegreso"
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label>Pasajeros</label>
+
+                <select id="pasajeros">
+
+                    <option>1 adulto</option>
+                    <option>2 adultos</option>
+                    <option>Familia</option>
+
+                </select>
+
+            </div>
+
+            <button
+                class="search-btn"
+                onclick="buscarViaje()"
+            >
+                🔍 Buscar
+            </button>
 
         </div>
 
     </div>
 
-</section>
+</div>
 
+<!-- LISTA DE DESTINOS (FUERA DEL GRID) -->
+
+</div> <!-- fin search-grid -->
+
+<datalist id="listaDestinos">
+
+    <option value="Bogotá">
+    <option value="Medellín">
+    <option value="Cartagena">
+    <option value="Santa Marta">
+    <option value="Armenia">
+    <option value="Pereira">
+
+</datalist>
 
 </section>
 
@@ -392,7 +439,6 @@
 
 <!-- ================= hoteles================= -->
 
-
 <section class="section">
 
     <div class="section-header">
@@ -401,12 +447,32 @@
             🏨 Hoteles en Colombia
         </h2>
 
+        <button
+            class="btn-ver-todos"
+            id="btnVerHoteles"
+            onclick="mostrarTodosHoteles()"
+        >
+            Ver todos los hoteles →
+        </button>
+
     </div>
 
-    <div 
-        class="cards-grid"
+    <div
         id="contenedorHoteles"
+        class="cards-grid"
     ></div>
+
+    <div class="text-center">
+
+        <button
+            class="btn-ver-todos"
+            id="btnVerHoteles"
+            onclick="mostrarTodosHoteles()"
+        >
+            Ver todos los hoteles →
+        </button>
+
+    </div>
 
 </section>
 
@@ -821,6 +887,109 @@
 </div>
 
 
+<div id="reservaModal" class="auth-modal hidden">
+
+    <div class="reserva-box">
+
+        <button
+            class="close-auth"
+            onclick="cerrarReserva()"
+        >
+            ✖
+        </button>
+
+             <div class="reserva-header">
+
+            <div class="reserva-icon">
+                📅
+            </div>
+
+            <div>
+
+                <h2>
+                    Nueva Reserva
+                </h2>
+
+                <p>
+                    Completa los datos de tu viaje
+                </p>
+
+            </div>
+
+        </div>
+
+        <input
+            type="hidden"
+            id="reservaTipo"
+        >
+
+        <input
+            type="hidden"
+            id="reservaNombre"
+        >
+
+        <label>Servicio</label>
+
+        <input
+            id="reservaServicio"
+            readonly
+        >
+
+        <label>Fecha</label>
+
+        <input
+            type="date"
+            id="reservaFecha"
+        >
+
+       <div class="reserva-grid">
+
+            <div>
+
+                <label>👨 Adultos</label>
+
+                <input
+                    type="number"
+                    id="reservaAdultos"
+                    value="1"
+                    min="1"
+                >
+
+            </div>
+
+            <div>
+
+                <label>🧒 Niños</label>
+
+                <input
+                    type="number"
+                    id="reservaNinos"
+                    value="0"
+                    min="0"
+                >
+
+            </div>
+
+        </div>
+
+        <label>Observaciones</label>
+
+        <textarea
+            id="reservaObs"
+        ></textarea>
+
+        <button
+            class="btn-confirmar-reserva"
+            onclick="confirmarReserva()"
+        >
+            ✅ Confirmar Reserva
+        </button>
+        
+    </div>
+
+</div> 
+
+
 <script src="/static/app.js"></script>
 <script>
 // ── DATOS PÚBLICOS ──
@@ -993,8 +1162,34 @@ document.addEventListener("DOMContentLoaded", ()=>{
   ["fecha-regreso","checkout"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=fmt2(regreso); });
 });
 </script>
+
+<!-- MODAL RESERVA -->
+<script>
+// Fix directo para el botón reservar
+document.addEventListener("click", function(e) {
+    const btn = e.target.closest(".btn-reservar");
+    if (!btn) return;
+    
+    if (!usuarioLogueado()) {
+        mostrarToast("🔒 Debes iniciar sesión para reservar");
+        abrirLogin();
+        return;
+    }
+    
+    const modal = document.getElementById("reservaModal");
+    modal.classList.remove("hidden");
+    modal.style.display = "flex";
+    
+    const hoy = new Date().toISOString().split("T")[0];
+    document.getElementById("reservaFecha").min = hoy;
+    document.getElementById("reservaFecha").value = hoy;
+    document.getElementById("reservaAdultos").value = "1";
+    document.getElementById("reservaNinos").value = "0";
+    document.getElementById("reservaObs").value = "";
+    document.getElementById("reservaServicio").value = 
+        btn.closest(".tour-card-public")?.querySelector("h3")?.innerText || "Servicio turístico";
+});
+</script>
+
 </body>
 </html>
-
-
-

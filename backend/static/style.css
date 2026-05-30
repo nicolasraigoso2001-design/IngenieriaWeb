@@ -707,7 +707,7 @@ body{
 
     align-items:center;
 
-    z-index:9999;
+    z-index:999999;
 }
 
 /* OCULTO */
@@ -1797,7 +1797,7 @@ body{
 
     justify-content:center;
 
-    z-index:999999;
+    z-index:9999;
 }
 
 .tour-detail-modal{
@@ -1923,4 +1923,378 @@ body{
     font-size:1rem;
 
     margin-bottom:10px;
+}
+
+.toast-warning{
+
+    position: fixed;
+
+    top: 50%;
+
+    left: 50vw;
+    transform: translateX(-50%) translateY(-50%);
+
+    transform: translate(-50%, -50%);
+
+    background: #ffb020;
+
+    color: #222;
+
+    padding: 22px 35px;
+
+    border-radius: 18px;
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    min-width: 350px;
+
+    max-width: 500px;
+
+    box-shadow: 0 12px 40px rgba(0,0,0,.4);
+
+    z-index: 999999;
+
+    border: 3px solid white;
+  
+    
+}
+
+@keyframes pulseToast{
+
+    0%{
+        transform: translate(-50%, -50%) scale(.8);
+        opacity:0;
+    }
+
+    100%{
+        transform: translate(-50%, -50%) scale(1);
+        opacity:1;
+    }
+}
+
+
+.reserva-box{
+
+    width:650px;
+
+    max-width:95%;
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:35px;
+
+    position:relative;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.25);
+
+    animation:modalReserva .3s ease;
+
+    overflow:hidden;
+}
+
+@keyframes modalReserva{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(20px)
+            scale(.95);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* ══ FIX FINAL RESERVA MODAL ══ */
+#reservaModal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0,0,0,0.75) !important;
+    z-index: 2147483647 !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#reservaModal.visible {
+    display: flex !important;
+}
+
+.reserva-box {
+    background: white !important;
+    border-radius: 20px !important;
+    padding: 36px !important;
+    width: 500px !important;
+    max-width: 92vw !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    position: relative !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4) !important;
+}
+
+.reserva-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-bottom:15px;
+}
+
+.reserva-icon{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #0ea5e9
+        );
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:34px;
+
+    color:white;
+}
+
+.reserva-header h2{
+
+    margin:0;
+
+    color:#0f172a;
+}
+
+.reserva-header p{
+
+    margin-top:4px;
+
+    color:#64748b;
+}
+
+.reserva-box input,
+.reserva-box textarea{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    transition:.25s;
+}
+
+.reserva-box input:focus,
+.reserva-box textarea:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(37,99,235,.15);
+}
+.reserva-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:15px;
+}
+
+.btn-confirmar-reserva{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:16px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #0ea5e9
+        );
+
+    transition:.25s;
+}
+
+.btn-confirmar-reserva:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(37,99,235,.35);
+}
+
+.hotel-body{
+
+    padding:18px;
+}
+
+.hotel-ciudad{
+
+    color:#64748b;
+
+    font-size:14px;
+}
+
+.hotel-stars{
+
+    color:#f59e0b;
+
+    margin:10px 0;
+}
+
+.hotel-price{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+    margin-bottom:12px;
+}
+
+#contenedorHoteles{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(320px,1fr)
+        );
+
+    gap:25px;
+
+    margin-top:25px;
+}
+
+.cards-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(320px,1fr)
+        );
+
+    gap:25px;
+}
+
+.hotel-stars{
+
+    color:#fbbf24;
+
+    font-size:18px;
+
+    margin:8px 0;
+}
+
+.ver-mas-container{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-top:30px;
+}
+
+.btn-ver-mas{
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:14px 28px;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.btn-ver-mas:hover{
+
+    transform:translateY(-2px);
+
+    background:#1d4ed8;
+}
+
+.text-center{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-top:25px;
 }

@@ -5,6 +5,22 @@ const API = "https://nicolasapp.azurewebsites.net";
 let token = "";
 let favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
 
+
+const ciudades = [
+
+    "Bogotá",
+
+    "Medellín",
+
+    "Cartagena",
+
+    "Santa Marta",
+
+    "Armenia",
+
+    "Pereira"
+
+];
 /* ══════════════════════════════════════════
    TOAST
 ══════════════════════════════════════════ */
@@ -906,6 +922,7 @@ async function eliminarGuia(id){
 
 /* FAVORITOS */
 function toggleFavorito(tour){
+    if(!requiereLogin()) return;
     const idx=favoritos.findIndex(f=>f.id===tour.id);
     if(idx>=0){favoritos.splice(idx,1);mostrarToast("💔 Eliminado de favoritos");}
     else{favoritos.push(tour);mostrarToast("❤️ Agregado a favoritos");}
@@ -1121,7 +1138,7 @@ function guardarFavorito(tour){
 /*guardar reservas */
 
 async function reservarTourRapido(id){
-
+    if(!requiereLogin()) return;
     await mostrarFormReserva(id);
 
     const tours = JSON.parse(
@@ -1209,6 +1226,8 @@ function usuarioLogueado(){
     );
 }
 
+
+
 function abrirFavoritosProtegido(){
 
     if(!usuarioLogueado()){
@@ -1240,6 +1259,8 @@ function abrirReservasProtegido(){
 
     cargarReservasUsuario();
 }
+
+
 
 
 
@@ -1324,12 +1345,12 @@ async function mostrarToursPublicos(){
 
                     <div class="tour-actions">
 
-                        <button 
-                            class="btn-reservar"
-                            onclick='event.stopPropagation(); reservarTourRapido(${t.id})'
-                        >
-                            📅 Reservar
-                        </button>
+                    <button 
+                        class="btn-reservar"
+                        onclick='event.stopPropagation(); abrirReserva(${JSON.stringify(t).replace(/'/g,"&#39;")}, "tour")'
+                    >
+                        📅 Reservar
+                    </button>
 
                         <button 
                             class="btn-favorito"
@@ -1429,20 +1450,20 @@ function abrirDetalleTour(tour){
 
                 <div class="detail-actions">
 
-                    <button 
-                        class="btn-reservar"
-                        onclick='reservarTourRapido(${tour.id})'
-                    >
-                        📅 Reservar
-                    </button>
+                <button 
+                    class="btn-reservar"
+                    onclick='reservarDesdeDetalle(${JSON.stringify(tour).replace(/'/g,"&#39;")})'
+                >
+                    📅 Reservar
+                </button>
 
-                    <button 
-                        class="btn-favorito"
-                        onclick='toggleFavorito(${JSON.stringify(tour).replace(/'/g,"&#39;")})'
-                    >
-                        ❤️ Favorito
-                    </button>
-
+                <button 
+                    class="btn-favorito"
+                    onclick='favoritoDesdeDetalle(${JSON.stringify(tour).replace(/'/g,"&#39;")})'
+                >
+                    ❤️ Favorito
+                </button>
+                
                 </div>
 
             </div>
@@ -1455,7 +1476,36 @@ function abrirDetalleTour(tour){
     );
 }
 
+function reservarDesdeDetalle(tour){
 
+    if(!usuarioLogueado()){
+
+        mostrarToast(
+            "🔒 Debes iniciar sesión para reservar"
+        );
+
+        return;
+    }
+
+
+}
+
+
+function favoritoDesdeDetalle(tour){
+
+    if(!usuarioLogueado()){
+
+        mostrarToast(
+            "🔒 Debes iniciar sesión para agregar favoritos"
+        );
+
+        return;
+    }
+
+    toggleFavorito(
+        tour
+    );
+}
 
 async function mostrarTodosTours(){
 
@@ -1522,7 +1572,7 @@ async function mostrarTodosTours(){
 
                         <button 
                             class="btn-reservar"
-                            onclick='event.stopPropagation(); reservarTourRapido(${t.id})'
+                            onclick='event.stopPropagation(); abrirReserva(${JSON.stringify(t).replace(/'/g,"&#39;")}, "tour")'
                         >
                             📅 Reservar
                         </button>
@@ -1702,7 +1752,9 @@ async function abrirSeccionTours(){
     });
 }
 
-async function cargarHoteles(){
+async function cargarHoteles(
+    mostrarTodos = false
+){
 
     try{
 
@@ -1716,11 +1768,15 @@ async function cargarHoteles(){
             "contenedorHoteles"
         );
 
-        if(!container)return;
+        if(!container) return;
 
         container.innerHTML = "";
 
-        hoteles.forEach(h => {
+        const hotelesMostrar = mostrarTodos
+            ? hoteles
+            : hoteles.slice(0,4);
+
+        hotelesMostrar.forEach(h => {
 
             const estrellas = "⭐".repeat(
                 h.estrellas || 4
@@ -1738,7 +1794,7 @@ async function cargarHoteles(){
                 <div class="tour-public-body">
 
                     <span class="badge">
-                        ${h.ciudad}
+                        📍 ${h.ciudad}
                     </span>
 
                     <h3>
@@ -1746,9 +1802,7 @@ async function cargarHoteles(){
                     </h3>
 
                     <div class="hotel-stars">
-
                         ${estrellas}
-
                     </div>
 
                     <p class="descripcion-card">
@@ -1759,7 +1813,6 @@ async function cargarHoteles(){
                     </p>
 
                     <div class="tour-precio">
-
                         💲${Number(h.precio).toLocaleString("es-CO")}
                         / noche
                     </div>
@@ -1768,12 +1821,14 @@ async function cargarHoteles(){
 
                         <button 
                             class="btn-reservar"
+                            onclick='event.stopPropagation(); abrirReserva(${JSON.stringify(h).replace(/'/g,"&#39;")}, "hotel")'
                         >
                             🏨 Reservar
                         </button>
 
                         <button 
                             class="btn-favorito"
+                            onclick='event.stopPropagation(); toggleFavorito(${JSON.stringify(h).replace(/'/g,"&#39;")})'
                         >
                             ❤️
                         </button>
@@ -1788,7 +1843,10 @@ async function cargarHoteles(){
 
     }catch(err){
 
-        console.error(err);
+        console.error(
+            "ERROR HOTELES:",
+            err
+        );
     }
 }
 
@@ -1801,3 +1859,389 @@ window.addEventListener(
         await cargarHoteles();
     }
 );
+
+function requiereLogin(){
+
+    const token = localStorage.getItem(
+        "token"
+    );
+
+    if(!token){
+
+        mostrarToast(
+            "🔒 Debes iniciar sesión para continuar"
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+
+// SOBRESCRIBIR abrirReserva para quitar .hidden antes de mostrar
+function abrirReserva(item, tipo) {
+ 
+    if (!requiereLogin()) return;
+ 
+    // Cerrar detalle si está abierto
+    document.querySelector(".tour-detail-overlay")?.remove();
+ 
+    const modal = document.getElementById("reservaModal");
+ 
+    // ← Este es el fix: quitar hidden ANTES de display
+    modal.classList.remove("hidden");
+    modal.style.display = "flex";
+ 
+    // Rellenar campos
+    document.getElementById("reservaTipo").value     = tipo || "";
+    document.getElementById("reservaNombre").value   = item.nombre || "";
+    document.getElementById("reservaServicio").value = item.nombre || "";
+ 
+    // Fecha mínima hoy
+    const hoy = new Date().toISOString().split("T")[0];
+    const fechaInput = document.getElementById("reservaFecha");
+    if (fechaInput) {
+        fechaInput.min   = hoy;
+        fechaInput.value = hoy;
+    }
+ 
+    // Reset campos
+    const adultos = document.getElementById("reservaAdultos");
+    const ninos   = document.getElementById("reservaNinos");
+    const obs     = document.getElementById("reservaObs");
+    if (adultos) adultos.value = "1";
+    if (ninos)   ninos.value   = "0";
+    if (obs)     obs.value     = "";
+ 
+    // Guardar precio para confirmar
+    modal.dataset.precio  = item.precio  || 0;
+    modal.dataset.ciudad  = item.ciudad  || "";
+}
+ 
+function cerrarReserva() {
+    const modal = document.getElementById("reservaModal");
+    modal.classList.add("hidden");
+    modal.style.display = "none";
+}
+ 
+async function confirmarReserva() {
+    const fecha   = document.getElementById("reservaFecha")?.value;
+    const adultos = parseInt(document.getElementById("reservaAdultos")?.value || "0");
+    const ninos   = parseInt(document.getElementById("reservaNinos")?.value   || "0");
+    const obs     = document.getElementById("reservaObs")?.value?.trim() || "";
+    const nombre  = document.getElementById("reservaNombre")?.value || "";
+    const tipo    = document.getElementById("reservaTipo")?.value   || "";
+    const modal   = document.getElementById("reservaModal");
+    const precio  = modal.dataset.precio  || 0;
+    const ciudad  = modal.dataset.ciudad  || "";
+ 
+    // Validaciones
+    if (!fecha) {
+        mostrarToast("⚠️ Selecciona una fecha");
+        return;
+    }
+    if (adultos < 1) {
+        mostrarToast("⚠️ Mínimo 1 adulto");
+        return;
+    }
+ 
+    // Guardar en localStorage
+    const reservas = JSON.parse(localStorage.getItem("reservas") || "[]");
+    reservas.push({
+        id:      Date.now(),
+        nombre,
+        tipo,
+        ciudad,
+        precio,
+        fecha,
+        adultos,
+        ninos,
+        obs,
+        fechaCreacion: new Date().toLocaleDateString("es-CO")
+    });
+    localStorage.setItem("reservas", JSON.stringify(reservas));
+ 
+    // Resumen
+    const personas = adultos + " adulto(s)" + (ninos > 0 ? `, ${ninos} niño(s)` : "");
+    mostrarToast(`✅ Reserva confirmada: ${nombre} — ${fecha} — ${personas}`);
+ 
+    cerrarReserva();
+}
+ 
+// Cerrar al hacer click fuera del box
+document.getElementById("reservaModal")?.addEventListener("click", function(e) {
+    if (e.target === this) cerrarReserva();
+});
+ 
+/* ══ FIX FINAL RESERVA ══ */
+function abrirReserva(item, tipo) {
+    if (!requiereLogin()) return;
+
+    document.querySelector(".tour-detail-overlay")?.remove();
+
+    const modal = document.getElementById("reservaModal");
+    
+    // Quitar hidden y forzar visibilidad con style directo
+    modal.removeAttribute("class");
+    modal.setAttribute("style", 
+        "display:flex!important;" +
+        "position:fixed!important;" +
+        "top:0!important;left:0!important;" +
+        "width:100vw!important;height:100vh!important;" +
+        "background:rgba(0,0,0,0.8)!important;" +
+        "z-index:2147483647!important;" +
+        "align-items:center!important;" +
+        "justify-content:center!important;"
+    );
+
+    document.getElementById("reservaTipo").value     = tipo || "";
+    document.getElementById("reservaNombre").value   = item.nombre || "";
+    document.getElementById("reservaServicio").value = item.nombre || "";
+
+    const hoy = new Date().toISOString().split("T")[0];
+    const fechaInput = document.getElementById("reservaFecha");
+    if (fechaInput) { fechaInput.min = hoy; fechaInput.value = hoy; }
+
+    const adultos = document.getElementById("reservaAdultos");
+    const ninos   = document.getElementById("reservaNinos");
+    const obs     = document.getElementById("reservaObs");
+    if (adultos) adultos.value = "1";
+    if (ninos)   ninos.value   = "0";
+    if (obs)     obs.value     = "";
+
+    modal.dataset.precio = item.precio || 0;
+    modal.dataset.ciudad = item.ciudad || "";
+}
+
+function cerrarReserva() {
+    const modal = document.getElementById("reservaModal");
+    modal.setAttribute("class", "auth-modal hidden");
+    modal.setAttribute("style", "display:none!important;");
+}
+
+
+/* ══ MOVER reservaModal al body ══ */
+window.addEventListener("load", function() {
+    const rm = document.getElementById("reservaModal");
+    if (rm) document.body.appendChild(rm);
+});
+
+
+async function mostrarTodosHoteles(){
+
+    await cargarHoteles(true);
+
+    document.getElementById(
+        "btnVerHoteles"
+    ).innerHTML =
+        "Ver menos";
+
+    document.getElementById(
+        "btnVerHoteles"
+    ).onclick =
+        mostrarMenosHoteles;
+}
+
+async function mostrarMenosHoteles(){
+
+    await cargarHoteles(false);
+
+    document.getElementById(
+        "btnVerHoteles"
+    ).innerHTML =
+        "Ver todos los hoteles →";
+
+    document.getElementById(
+        "btnVerHoteles"
+    ).onclick =
+        mostrarTodosHoteles;
+
+    document.getElementById(
+        "contenedorHoteles"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+
+async function buscarViaje(){
+
+    const destino = document.getElementById(
+        "destino"
+    ).value.trim();
+
+    if(!destino){
+
+        mostrarToast(
+            "📍 Ingresa un destino"
+        );
+
+        return;
+    }
+
+    try{
+
+        const res = await fetch(
+            API + "/tours"
+        );
+
+        const tours = await res.json();
+
+        const resultados = tours.filter(t =>
+            t.ciudad.toLowerCase()
+            .includes(
+                destino.toLowerCase()
+            )
+        );
+
+        if(resultados.length === 0){
+
+            mostrarToast(
+                "❌ No encontramos tours para ese destino"
+            );
+
+            return;
+        }
+
+        const container = document.getElementById(
+            "contenedorToursPublicos"
+        );
+
+        container.innerHTML = "";
+
+        resultados.forEach(t => {
+
+            const imagen = t.imagen
+                ? `${API}${encodeURI(t.imagen)}`
+                : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500";
+
+            container.innerHTML += `
+
+            <div
+                class="tour-card-public"
+                onclick='abrirDetalleTour(${JSON.stringify(t).replace(/'/g,"&#39;")})'
+            >
+
+                <img
+                    src="${imagen}"
+                    onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
+                >
+
+                <div class="tour-public-body">
+
+                    <span class="badge">
+                        ${t.ciudad}
+                    </span>
+
+                    <h3>
+                        ${t.nombre}
+                    </h3>
+
+                    <p class="descripcion-card">
+                        ${
+                            t.descripcion ||
+                            "Explora Colombia"
+                        }
+                    </p>
+
+                    <div class="tour-precio">
+
+                        💲${Number(t.precio).toLocaleString("es-CO")}
+
+                    </div>
+
+                    <div class="tour-actions">
+
+                        <button
+                            class="btn-reservar"
+                            onclick='event.stopPropagation(); abrirReserva(${JSON.stringify(t).replace(/'/g,"&#39;")}, "tour")'
+                        >
+                            📅 Reservar
+                        </button>
+
+                        <button
+                            class="btn-favorito"
+                            onclick='event.stopPropagation(); toggleFavorito(${JSON.stringify(t).replace(/'/g,"&#39;")})'
+                        >
+                            ❤️
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+            `;
+        });
+
+        container.scrollIntoView({
+            behavior:"smooth"
+        });
+
+        mostrarToast(
+            `✅ ${resultados.length} resultado(s) encontrados`
+        );
+
+    }catch(err){
+
+        console.error(err);
+
+        mostrarToast(
+            "❌ Error realizando búsqueda"
+        );
+    }
+}
+
+
+
+function mostrarResultadosBusqueda(
+    tours
+){
+
+    const container = document.getElementById(
+        "contenedorToursPublicos"
+    );
+
+    container.innerHTML = "";
+
+    tours.forEach(t => {
+
+        const imagen = `${API}${t.imagen}`;
+
+        container.innerHTML += `
+
+        <div
+            class="tour-card-public"
+            onclick='abrirDetalleTour(${JSON.stringify(t).replace(/'/g,"&#39;")})'
+        >
+
+            <img src="${imagen}">
+
+            <div class="tour-public-body">
+
+                <span class="badge">
+                    ${t.ciudad}
+                </span>
+
+                <h3>
+                    ${t.nombre}
+                </h3>
+
+                <div class="tour-precio">
+                    💲${Number(t.precio).toLocaleString("es-CO")}
+                </div>
+
+            </div>
+
+        </div>
+        `;
+    });
+
+    document.getElementById(
+        "contenedorToursPublicos"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+}
