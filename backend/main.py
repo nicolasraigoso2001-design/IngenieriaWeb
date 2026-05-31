@@ -437,7 +437,8 @@ async def register_user(user: Usuario):
 async def forgot_password(
     request: ForgotPasswordRequest
 ):
-
+    print("🔥🔥🔥 ENTRE AL ENDPOINT FORGOT PASSWORD 🔥🔥🔥")
+    
     db = SessionLocal()
 
     usuario = db.query(
