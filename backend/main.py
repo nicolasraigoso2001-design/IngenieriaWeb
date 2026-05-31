@@ -470,6 +470,9 @@ async def forgot_password(
 
     db.commit()
 
+    print("EMAIL_USER =", os.getenv("EMAIL_USER"))
+    print("EMAIL_PASSWORD =", "OK" if os.getenv("EMAIL_PASSWORD") else "NO")
+
     enviar_correo_recuperacion(
         usuario.correo,
         token
