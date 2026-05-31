@@ -55,13 +55,20 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 config = AppConfig()
 
 Base.metadata.create_all(bind=engine)
+
+import os
+
+print("================================")
+print("EMAIL_USER =", os.getenv("EMAIL_USER"))
+print("EMAIL_PASSWORD =", "OK" if os.getenv("EMAIL_PASSWORD") else "NO")
+print("================================")
+
 app = FastAPI(
     title=config.API_NAME,
     version=config.VERSION,
     description="API para gestión de tours, clientes, guías, transportes y reservas"
 )
-print("EMAIL_USER =", os.getenv("EMAIL_USER"))
-print("EMAIL_PASSWORD =", "OK" if os.getenv("EMAIL_PASSWORD") else "NO")
+
 # 🔥 STATIC FILES
 
 app.mount(
