@@ -439,6 +439,7 @@ async def forgot_password(
 ):
     print("🔥🔥🔥 ENTRE AL ENDPOINT FORGOT PASSWORD 🔥🔥🔥")
     
+
     db = SessionLocal()
 
     usuario = db.query(
@@ -469,6 +470,10 @@ async def forgot_password(
 
     print("EMAIL_USER =", os.getenv("EMAIL_USER"))
     print("EMAIL_PASSWORD =", "OK" if os.getenv("EMAIL_PASSWORD") else "NO")
+    print("EMAIL_USER =", os.getenv("EMAIL_USER"))
+    print("EMAIL_PASSWORD =", "OK" if os.getenv("EMAIL_PASSWORD") else "NO")
+    print("TOKEN =", token)
+    print("CORREO =", usuario.correo)
 
     enviar_correo_recuperacion(
         usuario.correo,
