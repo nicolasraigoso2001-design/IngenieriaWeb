@@ -226,40 +226,35 @@ def enviar_correo_recuperacion(
     token: str
 ):
 
-    remitente = os.getenv("EMAIL_USER")
-
-    password = os.getenv("EMAIL_PASSWORD")
-
-    enlace = (
-        f"https://nicolasapp.azurewebsites.net/"
-        f"reset-password.html?token={token}"
-    )
-
-    mensaje = MIMEMultipart()
-
-    mensaje["From"] = remitente
-    mensaje["To"] = destino
-    mensaje["Subject"] = "Recuperación de contraseña"
-
-    cuerpo = f"""
-Hola,
-
-Recibimos una solicitud para restablecer tu contraseña.
-
-Haz clic en el siguiente enlace:
-
-{enlace}
-
-Este enlace expirará en 30 minutos.
-
-Si no solicitaste este cambio, ignora este mensaje.
-"""
-
-    mensaje.attach(
-        MIMEText(cuerpo, "plain")
-    )
-
     try:
+
+        remitente = os.getenv("EMAIL_USER")
+        password = os.getenv("EMAIL_PASSWORD")
+
+        print("================================")
+        print("ENTRO A ENVIAR_CORREO")
+        print("DESTINO:", destino)
+        print("EMAIL_USER:", remitente)
+        print("EMAIL_PASSWORD:", "OK" if password else "NO")
+        print("================================")
+
+        enlace = (
+            f"https://nicolasapp.azurewebsites.net/"
+            f"reset-password.html?token={token}"
+        )
+
+        mensaje = MIMEMultipart()
+
+        mensaje["From"] = remitente
+        mensaje["To"] = destino
+        mensaje["Subject"] = "Recuperación de contraseña"
+
+        mensaje.attach(
+            MIMEText(
+                f"Recupera tu contraseña aquí:\n\n{enlace}",
+                "plain"
+            )
+        )
 
         servidor = smtplib.SMTP(
             "smtp.gmail.com",
@@ -268,10 +263,14 @@ Si no solicitaste este cambio, ignora este mensaje.
 
         servidor.starttls()
 
+        print("✅ TLS OK")
+
         servidor.login(
             remitente,
             password
         )
+
+        print("✅ LOGIN OK")
 
         servidor.sendmail(
             remitente,
@@ -279,16 +278,13 @@ Si no solicitaste este cambio, ignora este mensaje.
             mensaje.as_string()
         )
 
-        servidor.quit()
+        print("✅ CORREO ENVIADO")
 
-        print("✅ Correo enviado")
+        servidor.quit()
 
     except Exception as e:
 
-        print(
-            "❌ Error enviando correo:",
-            e
-        )
+        print("❌ ERROR SMTP:", str(e))
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
