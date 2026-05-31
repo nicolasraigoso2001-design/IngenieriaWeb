@@ -2131,6 +2131,30 @@ async function mostrarMenosHoteles(){
 
 async function buscarViaje(){
 
+    if(!tipoBusqueda){
+
+        mostrarToast(
+            "⚠️ Selecciona qué deseas buscar"
+        );
+
+        return;
+    }
+
+    if(tipoBusqueda === "paquete"){
+        return buscarPaquetes();
+    }
+
+    if(tipoBusqueda === "hotel"){
+        return buscarHotelesBusqueda();
+    }
+
+    if(tipoBusqueda === "transporte"){
+        return buscarTransportes();
+    }
+}
+
+async function buscarTours(){
+
     const destino = document.getElementById(
         "destino"
     ).value.trim();
@@ -2159,95 +2183,9 @@ async function buscarViaje(){
             )
         );
 
-        if(resultados.length === 0){
-
-            mostrarToast(
-                "❌ No encontramos tours para ese destino"
-            );
-
-            return;
-        }
-
-        const container = document.getElementById(
-            "contenedorToursPublicos"
-        );
-
-        container.innerHTML = "";
-
-        resultados.forEach(t => {
-
-            const imagen = t.imagen
-                ? `${API}${encodeURI(t.imagen)}`
-                : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500";
-
-            container.innerHTML += `
-
-            <div
-                class="tour-card-public"
-                onclick='abrirDetalleTour(${JSON.stringify(t).replace(/'/g,"&#39;")})'
-            >
-
-                <img
-                    src="${imagen}"
-                    onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'"
-                >
-
-                <div class="tour-public-body">
-
-                    <span class="badge">
-                        ${t.ciudad}
-                    </span>
-
-                    <h3>
-                        ${t.nombre}
-                    </h3>
-
-                    <p class="descripcion-card">
-                        ${
-                            t.descripcion ||
-                            "Explora Colombia"
-                        }
-                    </p>
-
-                    <div class="tour-precio">
-
-                        💲${Number(t.precio).toLocaleString("es-CO")}
-
-                    </div>
-
-                    <div class="tour-actions">
-
-                        <button
-                            class="btn-reservar"
-                            onclick='event.stopPropagation(); abrirReserva(${JSON.stringify(t).replace(/'/g,"&#39;")}, "tour")'
-                        >
-                            📅 Reservar
-                        </button>
-
-                        <button
-                            class="btn-favorito"
-                            onclick='event.stopPropagation(); toggleFavorito(${JSON.stringify(t).replace(/'/g,"&#39;")})'
-                        >
-                            ❤️
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-            `;
-        });
-
-        container.scrollIntoView({
-            behavior:"smooth"
-        });
-
-        mostrarToast(
-            `✅ ${resultados.length} resultado(s) encontrados`
-        );
-
-    }catch(err){
+        // TODO tu código actual aquí
+    }
+    catch(err){
 
         console.error(err);
 
@@ -2256,7 +2194,6 @@ async function buscarViaje(){
         );
     }
 }
-
 
 
 function mostrarResultadosBusqueda(
@@ -2307,4 +2244,236 @@ function mostrarResultadosBusqueda(
     ).scrollIntoView({
         behavior:"smooth"
     });
+}
+
+
+
+
+async function buscarPaquetes(){
+
+    const destino =
+        document.getElementById("destino")
+        .value.trim();
+
+    const pasajeros =
+        document.getElementById("pasajeros")
+        .value;
+
+    const resHoteles =
+        await fetch(API + "/hoteles");
+
+    const hoteles =
+        await resHoteles.json();
+
+    const resultados =
+        hoteles.filter(h =>
+            h.ciudad.toLowerCase()
+            .includes(destino.toLowerCase())
+        );
+
+    const container =
+        document.getElementById(
+            "contenedorResultados"
+        );
+
+    container.innerHTML = "";
+
+    resultados.forEach(h => {
+
+        const precioHotel =
+            Number(h.precio);
+
+        const precioTransporte =
+            450000;
+
+        const total =
+            (precioHotel + precioTransporte)
+            * pasajeros;
+
+        container.innerHTML += `
+
+        <div class="paquete-card">
+
+            <img
+                src="${API}${h.imagen}"
+            >
+
+            <div class="paquete-info">
+
+                <h2>
+                    ${h.nombre}
+                </h2>
+
+                <p>
+                    📍 ${h.ciudad}
+                </p>
+
+                <p>
+                    👥 ${pasajeros} pasajeros
+                </p>
+
+                <p>
+                    🏨 Hotel + Transporte
+                </p>
+
+                <h3>
+                    💲${total.toLocaleString("es-CO")}
+                </h3>
+
+                <button
+                    onclick='abrirDetallePaquete(${JSON.stringify(h).replace(/'/g,"&#39;")},${pasajeros})'
+                >
+                    Ver detalle
+                </button>
+
+            </div>
+
+        </div>
+        `;
+    });
+}
+
+async function buscarHotelesBusqueda(){
+
+    const destino = document.getElementById(
+        "destino"
+    ).value.trim();
+
+    const res = await fetch(
+        API + "/hoteles"
+    );
+
+    const hoteles = await res.json();
+
+    const resultados = hoteles.filter(h =>
+        h.ciudad.toLowerCase()
+        .includes(
+            destino.toLowerCase()
+        )
+    );
+
+    const container = document.getElementById(
+        "contenedorHoteles"
+    );
+
+    container.innerHTML = "";
+
+        resultados.forEach(h => {
+
+            const imagen = h.imagen
+                ? `${API}${h.imagen}`
+                : "https://via.placeholder.com/400x250";
+
+            const estrellas =
+                "⭐".repeat(
+                    h.estrellas || 4
+                );
+
+            container.innerHTML += `
+
+<div class="hotel-card-modern">
+
+    <img
+        src="${imagen}"
+        class="hotel-img"
+    >
+
+    <div class="hotel-content">
+
+        <span class="hotel-city">
+            📍 ${h.ciudad}
+        </span>
+
+        <h3 class="hotel-title">
+            ${h.nombre}
+        </h3>
+
+        <div class="hotel-stars">
+            ${estrellas}
+        </div>
+
+        <p class="hotel-description">
+            ${
+                h.descripcion ||
+                "Disfruta una experiencia inolvidable."
+            }
+        </p>
+
+        <div class="hotel-services">
+
+            🏊 Piscina
+
+            📶 WiFi
+
+            🍽️ Restaurante
+
+        </div>
+
+        <div class="hotel-footer">
+
+            <div>
+
+                <small>
+                    Precio por noche
+                </small>
+
+                <div class="hotel-price">
+                    $${Number(h.precio)
+                        .toLocaleString("es-CO")}
+                </div>
+
+            </div>
+
+            <button
+                class="btn-hotel"
+                onclick='abrirDetalleHotel(${JSON.stringify(h).replace(/'/g,"&#39;")})'
+            >
+                Ver detalle
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+`;
+        });
+
+    container.scrollIntoView({
+        behavior:"smooth"
+    });
+}   
+
+function buscarTransportes(){
+
+    mostrarToast(
+        "🚗 Módulo de transporte en construcción"
+    );
+}
+
+
+
+let tipoBusqueda = null;
+
+
+function seleccionarTipo(
+    tipo,
+    boton
+){
+
+    tipoBusqueda = tipo;
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(tab =>
+            tab.classList.remove("active")
+        );
+
+    boton.classList.add("active");
+
+    console.log(
+        "Seleccionado:",
+        tipo
+    );
 }

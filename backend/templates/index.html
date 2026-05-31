@@ -82,9 +82,8 @@
         </div>
 
         <div class="nav-links">
-
             <button class="nav-btn">
-                🚗 Transporte + Hotel
+            🧳 Paquetes
             </button>
 
             <button class="nav-btn">
@@ -100,9 +99,7 @@
 
             <button class="nav-btn">
                 🚐 Transporte
-            </button>
-
-        
+            </button>        
 
         </div>
 
@@ -133,21 +130,30 @@
     <!-- BUSCADOR -->
     <div class="search-box">
 
-        <div class="tabs">
+    <div class="tabs">
 
-            <button class="tab">
-                🏨🚗 Transporte + Hotel
-            </button>
+        <button
+            class="tab "
+            onclick="seleccionarTipo('paquete', this)"
+        >
+            🧳 Paquetes
+        </button>
+        
+        <button
+            class="tab"
+            onclick="seleccionarTipo('hotel', this)"
+        >
+            🏨 Solo Hotel
+        </button>
 
-            <button class="tab">
-                🏨 Solo Hotel
-            </button>
+        <button
+            class="tab"
+            onclick="seleccionarTipo('transporte', this)"
+        >
+            🚗 Solo Transporte
+        </button>
 
-            <button class="tab">
-                🚗 Solo Transporte
-            </button>
-
-        </div>
+    </div>
 
         <div class="search-grid">
 
@@ -449,7 +455,6 @@
 
         <button
             class="btn-ver-todos"
-            id="btnVerHoteles"
             onclick="mostrarTodosHoteles()"
         >
             Ver todos los hoteles →
@@ -461,18 +466,6 @@
         id="contenedorHoteles"
         class="cards-grid"
     ></div>
-
-    <div class="text-center">
-
-        <button
-            class="btn-ver-todos"
-            id="btnVerHoteles"
-            onclick="mostrarTodosHoteles()"
-        >
-            Ver todos los hoteles →
-        </button>
-
-    </div>
 
 </section>
 
