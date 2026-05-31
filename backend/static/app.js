@@ -1766,7 +1766,7 @@ async function recuperarCuenta(){
         console.log("7 - Data:", data);
 
         mostrarToast(
-            data.message
+            data.message || data.detail || "Error"
         );
 
         cerrarRecuperacion();

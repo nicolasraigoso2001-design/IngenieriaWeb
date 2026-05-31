@@ -8,7 +8,11 @@ from patterns.singleton.app_config import AppConfig
 from pydantic import BaseModel, Field, EmailStr, validator
 from jose import JWTError, jwt
 from fastapi import Request
+import os
+import smtplib
 
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from sqlalchemy import (
     Column,
     Integer,
@@ -44,6 +48,9 @@ from database.models import (
     HotelDB,
 )
 
+EMAIL_USER = os.getenv("EMAIL_USER")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
 # ------------------- CONFIG -------------------
 config = AppConfig()
 
@@ -53,7 +60,8 @@ app = FastAPI(
     version=config.VERSION,
     description="API para gestión de tours, clientes, guías, transportes y reservas"
 )
-
+print("EMAIL_USER =", os.getenv("EMAIL_USER"))
+print("EMAIL_PASSWORD =", "OK" if os.getenv("EMAIL_PASSWORD") else "NO")
 # 🔥 STATIC FILES
 
 app.mount(
@@ -203,6 +211,77 @@ def authenticate_user(username: str, password: str):
     db.close()
 
     return user
+
+
+
+def enviar_correo_recuperacion(
+    destino: str,
+    token: str
+):
+
+    remitente = os.getenv("EMAIL_USER")
+
+    password = os.getenv("EMAIL_PASSWORD")
+
+    enlace = (
+        f"https://nicolasapp.azurewebsites.net/"
+        f"reset-password.html?token={token}"
+    )
+
+    mensaje = MIMEMultipart()
+
+    mensaje["From"] = remitente
+    mensaje["To"] = destino
+    mensaje["Subject"] = "Recuperación de contraseña"
+
+    cuerpo = f"""
+Hola,
+
+Recibimos una solicitud para restablecer tu contraseña.
+
+Haz clic en el siguiente enlace:
+
+{enlace}
+
+Este enlace expirará en 30 minutos.
+
+Si no solicitaste este cambio, ignora este mensaje.
+"""
+
+    mensaje.attach(
+        MIMEText(cuerpo, "plain")
+    )
+
+    try:
+
+        servidor = smtplib.SMTP(
+            "smtp.gmail.com",
+            587
+        )
+
+        servidor.starttls()
+
+        servidor.login(
+            remitente,
+            password
+        )
+
+        servidor.sendmail(
+            remitente,
+            destino,
+            mensaje.as_string()
+        )
+
+        servidor.quit()
+
+        print("✅ Correo enviado")
+
+    except Exception as e:
+
+        print(
+            "❌ Error enviando correo:",
+            e
+        )
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
@@ -384,15 +463,16 @@ async def forgot_password(
 
     db.commit()
 
-    print(
-        f"LINK RECUPERACION: https://nicolasapp.azurewebsites.net/reset-password.html?token={token}"
+    enviar_correo_recuperacion(
+        usuario.correo,
+        token
     )
 
     db.close()
 
     return {
         "message":
-        "📧 Se generó el enlace de recuperación"
+        "📧 Se enviaron las instrucciones al correo"
     }
 
 
