@@ -1701,7 +1701,7 @@ async function cargarImagenesTour(
     }
 }
 
-function abrirRecuperarCuenta(){
+function abrirRecuperacion(){
 
     document.getElementById(
         "recoverModal"
@@ -1710,7 +1710,7 @@ function abrirRecuperarCuenta(){
     );
 }
 
-function cerrarRecuperarCuenta(){
+function cerrarRecuperacion(){
 
     document.getElementById(
         "recoverModal"
@@ -1721,9 +1721,17 @@ function cerrarRecuperarCuenta(){
 
 async function recuperarCuenta(){
 
-    const correo = document.getElementById(
-        "recoverEmail"
-    ).value.trim();
+    console.log("1 - Entró a recuperarCuenta");
+
+    const input = document.getElementById("recoverEmail");
+
+    console.log("2 - Input:", input);
+
+    console.log("3 - Valor:", input?.value);
+
+    const correo = input?.value?.trim();
+
+    console.log("4 - Correo:", correo);
 
     if(!correo){
 
@@ -1734,8 +1742,63 @@ async function recuperarCuenta(){
         return;
     }
 
+    try{
+
+        console.log("5 - Enviando fetch");
+
+        const res = await fetch(
+            API + "/forgot-password",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify({
+                    email: correo
+                })
+            }
+        );
+
+        console.log("6 - Status:", res.status);
+
+        const data = await res.json();
+
+        console.log("7 - Data:", data);
+
+        mostrarToast(
+            data.message
+        );
+
+        cerrarRecuperacion();
+
+    }catch(err){
+
+        console.error("ERROR:", err);
+
+        mostrarToast(
+            "❌ Error al recuperar cuenta"
+        );
+    }
+}
+
+async function enviarRecuperacion(){
+
+    const correo = document.getElementById(
+        "correoRecuperacion"
+    ).value.trim();
+
+    if(!correo){
+
+        mostrarToast(
+            "📧 Ingresa un correo"
+        );
+
+        return;
+    }
+
     mostrarToast(
-        "✅ Te enviamos instrucciones al correo"
+        "📧 Se envió un enlace de recuperación a " +
+        correo
     );
 
     cerrarRecuperarCuenta();

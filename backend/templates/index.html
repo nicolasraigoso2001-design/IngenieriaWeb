@@ -672,9 +672,9 @@
 
             <div class="auth-links">
 
-            <a 
+            <a
                 href="#"
-                onclick="abrirRecuperarCuenta()"
+                onclick="abrirRecuperacion()"
             >
                 ¿Olvidaste tu contraseña?
             </a>
@@ -704,7 +704,7 @@
 
         <button 
             class="close-auth"
-            onclick="cerrarRecuperarCuenta()"
+            onclick="cerrarRecuperacion()"
         >
             ✖
         </button>
@@ -723,20 +723,20 @@
                 Correo electrónico
             </label>
 
-            <input 
+            <input
                 type="email"
                 id="recoverEmail"
-                placeholder="correo@gmail.com"
+                placeholder="Correo electrónico"
             >
 
         </div>
 
-        <button 
-            class="main-auth-btn"
-            onclick="recuperarCuenta()"
-        >
-            Recuperar cuenta
-        </button>
+            <button
+                class="main-auth-btn"
+                onclick="recuperarCuenta()"
+            >
+                📧 Recuperar cuenta
+            </button>
 
     </div>
 
@@ -1190,6 +1190,8 @@ document.addEventListener("click", function(e) {
         btn.closest(".tour-card-public")?.querySelector("h3")?.innerText || "Servicio turístico";
 });
 </script>
+
+
 
 </body>
 </html>

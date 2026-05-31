@@ -9,7 +9,13 @@ from pydantic import BaseModel, Field, EmailStr, validator
 from jose import JWTError, jwt
 from fastapi import Request
 
-
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Float,
+    DateTime
+)
 from database.connection import engine, Base
 
 
@@ -150,6 +156,21 @@ class Usuario(BaseModel):
 
     password: str
 
+
+
+class ForgotPasswordRequest(BaseModel):
+
+    email: str
+
+    
+import secrets
+
+from datetime import datetime, timedelta
+
+class ForgotPasswordRequest(BaseModel):
+
+    email: str
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -265,7 +286,11 @@ async def login(
     }
 
 
+class ResetPasswordRequest(BaseModel):
 
+    token: str
+
+    password: str
 
 
 @app.get("/perfil", dependencies=[Depends(get_current_user)])
@@ -322,6 +347,90 @@ async def register_user(user: Usuario):
 
     return {
         "message":"Usuario registrado"
+    }
+
+# ------------------- recueperar -------------------
+@app.post("/forgot-password")
+
+async def forgot_password(
+    request: ForgotPasswordRequest
+):
+
+    db = SessionLocal()
+
+    usuario = db.query(
+        UsuarioDB
+    ).filter(
+        UsuarioDB.correo == request.email
+    ).first()
+
+    if not usuario:
+
+        db.close()
+
+        return {
+            "message":
+            "Si el correo existe recibirás instrucciones."
+        }
+
+    token = secrets.token_urlsafe(32)
+
+    usuario.reset_token = token
+
+    usuario.reset_token_expiry = (
+        datetime.utcnow()
+        + timedelta(minutes=30)
+    )
+
+    db.commit()
+
+    print(
+        f"LINK RECUPERACION: https://nicolasapp.azurewebsites.net/reset-password.html?token={token}"
+    )
+
+    db.close()
+
+    return {
+        "message":
+        "📧 Se generó el enlace de recuperación"
+    }
+
+
+
+@app.post("/reset-password")
+
+async def reset_password(
+    request: ResetPasswordRequest
+):
+
+    db = SessionLocal()
+
+    usuario = db.query(
+        UsuarioDB
+    ).filter(
+        UsuarioDB.reset_token == request.token
+    ).first()
+
+    if not usuario:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Token inválido"
+        )
+
+    usuario.password = request.password
+
+    usuario.reset_token = None
+
+    usuario.reset_token_expiry = None
+
+    db.commit()
+
+    db.close()
+
+    return {
+        "message":
+        "✅ Contraseña actualizada"
     }
 
 # ------------------- TOURS -------------------
@@ -844,3 +953,5 @@ async def obtener_imagenes_tour(
     db.close()
 
     return imagenes
+
+    

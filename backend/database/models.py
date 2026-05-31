@@ -2,6 +2,14 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from database.connection import Base
 from sqlalchemy import ForeignKey
 
+
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime
+)
+
 class UsuarioDB(Base):
 
     __tablename__ = "usuarios"
@@ -35,6 +43,16 @@ class UsuarioDB(Base):
     password = Column(
         String,
         nullable=False
+    )
+
+    reset_token = Column(
+        String,
+        nullable=True
+    )
+
+    reset_token_expiry = Column(
+        DateTime,
+        nullable=True
     )
 
 
