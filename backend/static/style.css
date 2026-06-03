@@ -1656,64 +1656,67 @@ body{
 
     background:white;
 
-    border-radius:18px;
+    border-radius:20px;
 
     overflow:hidden;
 
-    box-shadow:
-    0 6px 18px rgba(0,0,0,.08);
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
 
-    transition:.25s;
+    transition:.3s;
 
     display:flex;
 
     flex-direction:column;
 
-    height:100%;
+    min-height:480px;
 }
 
 .tour-card-public:hover{
 
-    transform:translateY(-6px);
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
 }
 
 .tour-card-public img{
 
     width:100%;
 
-    height:170px;
+    height:250px;
 
     object-fit:cover;
 }
 
 .tour-public-body{
 
-    padding:14px;
+    flex:1;
+
+    padding:25px;
 
     display:flex;
 
     flex-direction:column;
-
-    flex:1;
 }
+
 
 .tour-public-body h3{
 
-    font-size:18px;
+    font-size:28px;
 
-    margin:8px 0;
+    margin:10px 0;
 
     color:#0f172a;
 }
+
 .tour-precio{
 
-    font-size:18px;
+    font-size:32px;
 
-    font-weight:800;
+    font-weight:700;
 
-    color:#00a86b;
+    color:#16a34a;
 
-    margin-top:10px;
+    margin-top:15px;
 }
 
 .tour-actions{
@@ -1742,13 +1745,13 @@ body{
     display:grid;
 
     grid-template-columns:
-    repeat(auto-fit,minmax(240px,280px));
+    repeat(
+        auto-fit,
+        minmax(380px,1fr)
+    );
 
-    gap:24px;
-
-    justify-content:center;
+    gap:25px;
 }
-
 
 .ver-todos-wrap{
 
@@ -2552,4 +2555,240 @@ body{
         );
 
     gap:25px;
+}
+
+.field-reserva{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.field-reserva label{
+    font-weight:600;
+    color:#334155;
+}
+
+.field-reserva select{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    background:white;
+
+    transition:.25s;
+}
+
+.field-reserva select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 4px rgba(37,99,235,.15);
+}
+
+#reservaModal select{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    background:white;
+
+    transition:.25s;
+}
+
+#reservaModal select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 4px rgba(37,99,235,.15);
+}
+
+#reservaObs{
+
+    min-height:100px;
+
+    resize:vertical;
+}
+
+.reserva-box.premium{
+
+    width:700px;
+    max-width:95%;
+
+    background:white;
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.18);
+}
+
+.reserva-banner{
+
+    background:
+        linear-gradient(
+            135deg,
+            #0ea5e9,
+            #2563eb
+        );
+
+    color:white;
+
+    padding:30px;
+}
+
+.reserva-banner h2{
+
+    margin:0;
+
+    font-size:30px;
+}
+
+.reserva-banner p{
+
+    margin-top:8px;
+
+    opacity:.9;
+}
+
+.reserva-section{
+
+    padding:20px 25px;
+}
+
+.reserva-section label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+}
+
+.reserva-section input,
+.reserva-section textarea{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #dbe2ea;
+
+    border-radius:14px;
+}
+
+.reserva-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:20px;
+
+    padding:0 25px;
+}
+
+.card-cantidad{
+
+    background:#f8fafc;
+
+    padding:20px;
+
+    border-radius:16px;
+}
+
+.payment-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:15px;
+}
+
+.payment-card{
+
+    border:2px solid #e5e7eb;
+
+    border-radius:16px;
+
+    padding:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.payment-card:hover{
+
+    border-color:#2563eb;
+
+    background:#eff6ff;
+}
+
+.payment-card input{
+
+    display:none;
+}
+
+.payment-card span{
+
+    font-weight:600;
+}
+
+.premium-btn{
+
+    width:calc(100% - 50px);
+
+    margin:25px;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0ea5e9,
+            #2563eb
+        );
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
 }

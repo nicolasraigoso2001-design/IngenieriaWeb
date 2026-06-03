@@ -882,62 +882,59 @@
 
 <div id="reservaModal" class="auth-modal hidden">
 
-    <div class="reserva-box">
+    <div class="reserva-box premium">
 
         <button
             class="close-auth"
             onclick="cerrarReserva()"
         >
-            ✖
+            ✕
         </button>
 
-             <div class="reserva-header">
-
-            <div class="reserva-icon">
-                📅
-            </div>
+        <div class="reserva-banner">
 
             <div>
-
-                <h2>
-                    Nueva Reserva
-                </h2>
+                <h2>🧳 Reserva tu experiencia</h2>
 
                 <p>
-                    Completa los datos de tu viaje
+                    Completa los datos y asegura tu próxima aventura
                 </p>
 
             </div>
 
         </div>
 
-        <input
-            type="hidden"
-            id="reservaTipo"
-        >
+        <div class="reserva-section">
 
-        <input
-            type="hidden"
-            id="reservaNombre"
-        >
-
-        <label>Servicio</label>
-
-        <input
-            id="reservaServicio"
-            readonly
-        >
-
-        <label>Fecha</label>
-
-        <input
-            type="date"
-            id="reservaFecha"
-        >
-
-       <div class="reserva-grid">
+        <div class="reserva-grid">
 
             <div>
+
+                <label>✈️ Fecha de Ida</label>
+
+                <input
+                    type="date"
+                    id="reservaFecha"
+                >
+
+            </div>
+
+            <div>
+
+                <label>🛬 Fecha de Regreso</label>
+
+                <input
+                    type="date"
+                    id="reservaFechaRegreso"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="reserva-grid">
+
+            <div class="card-cantidad">
 
                 <label>👨 Adultos</label>
 
@@ -950,7 +947,7 @@
 
             </div>
 
-            <div>
+            <div class="card-cantidad">
 
                 <label>🧒 Niños</label>
 
@@ -964,27 +961,58 @@
             </div>
 
         </div>
+ </div>
 
-        <label>Observaciones</label>
+        <div class="reserva-section">
 
-        <textarea
-            id="reservaObs"
-        ></textarea>
+            <label>Método de Pago</label>
+
+            <div class="payment-grid">
+
+                <label class="payment-card">
+                    <input type="radio" name="metodoPago" value="efectivo">
+                    💵
+                    <span>Efectivo</span>
+                </label>
+
+                <label class="payment-card">
+                    <input type="radio" name="metodoPago" value="paypal">
+                    🅿️
+                    <span>PayPal</span>
+                </label>
+
+                <label class="payment-card">
+                    <input type="radio" name="metodoPago" value="tarjeta">
+                    💳
+                    <span>Tarjeta</span>
+                </label>
+
+                <label class="payment-card">
+                    <input type="radio" name="metodoPago" value="transferencia">
+                    🏦
+                    <span>Transferencia</span>
+                </label>
+
+            </div>
+
+        </div>
 
         <button
-            class="btn-confirmar-reserva"
+            class="btn-confirmar-reserva premium-btn"
             onclick="confirmarReserva()"
         >
-            ✅ Confirmar Reserva
+            Confirmar Reserva
         </button>
-        
+
     </div>
 
-</div> 
-
+</div>
 
 <script src="/static/app.js"></script>
+
+
 <script>
+
 // ── DATOS PÚBLICOS ──
 const DESTINOS = [
   { ciudad:"Cartagena", desc:"Ciudad amurallada y playas del Caribe", precio:320000, img:"https://images.unsplash.com/photo-1583329507640-3a8af4d3527c?w=500&q=80", estrellas:5 },

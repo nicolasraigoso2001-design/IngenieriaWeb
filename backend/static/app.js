@@ -1983,53 +1983,141 @@ function abrirReserva(item, tipo) {
     modal.dataset.ciudad  = item.ciudad  || "";
 }
  
-function cerrarReserva() {
-    const modal = document.getElementById("reservaModal");
-    modal.classList.add("hidden");
-    modal.style.display = "none";
-}
+
  
 async function confirmarReserva() {
-    const fecha   = document.getElementById("reservaFecha")?.value;
-    const adultos = parseInt(document.getElementById("reservaAdultos")?.value || "0");
-    const ninos   = parseInt(document.getElementById("reservaNinos")?.value   || "0");
-    const obs     = document.getElementById("reservaObs")?.value?.trim() || "";
-    const nombre  = document.getElementById("reservaNombre")?.value || "";
-    const tipo    = document.getElementById("reservaTipo")?.value   || "";
-    const modal   = document.getElementById("reservaModal");
-    const precio  = modal.dataset.precio  || 0;
-    const ciudad  = modal.dataset.ciudad  || "";
- 
-    // Validaciones
+
+    const fecha =
+        document.getElementById("reservaFecha")?.value;
+
+    const fechaRegreso =
+    document.getElementById("reservaFechaRegreso")?.value;
+
+    const adultos =
+        parseInt(
+            document.getElementById("reservaAdultos")?.value || "0"
+        );
+
+    const ninos =
+        parseInt(
+            document.getElementById("reservaNinos")?.value || "0"
+        );
+
+
+    const nombre =
+        document.getElementById("reservaNombre")?.value || "";
+
+    const tipo =
+        document.getElementById("reservaTipo")?.value || "";
+        
+
+    const metodoPago =
+        document.getElementById("reservaMetodoPago")?.value || "";
+
+    const modal =
+        document.getElementById("reservaModal");
+
+    const precio =
+        modal?.dataset?.precio || 0;
+
+    const ciudad =
+        modal?.dataset?.ciudad || "";
+
+    // =========================
+    // VALIDACIONES
+    // ========================
+
     if (!fecha) {
-        mostrarToast("⚠️ Selecciona una fecha");
+
+        mostrarToast("⚠️ Selecciona la fecha de ida");
+
         return;
     }
-    if (adultos < 1) {
-        mostrarToast("⚠️ Mínimo 1 adulto");
+
+    if (!fechaRegreso) {
+
+        mostrarToast("⚠️ Selecciona la fecha de regreso");
+
         return;
     }
- 
-    // Guardar en localStorage
-    const reservas = JSON.parse(localStorage.getItem("reservas") || "[]");
-    reservas.push({
-        id:      Date.now(),
+
+    const hoy = new Date().toISOString().split("T")[0];
+
+    if (fecha < hoy) {
+
+        mostrarToast(
+            "⚠️ La fecha de ida no puede ser anterior a hoy"
+        );
+
+        return;
+    }
+
+    if (fechaRegreso < fecha) {
+
+        mostrarToast(
+            "⚠️ La fecha de regreso debe ser posterior a la fecha de ida"
+        );
+
+        return;
+    }
+
+    // =========================
+    // GUARDAR RESERVA
+    // =========================
+
+    const reservas =
+        JSON.parse(
+            localStorage.getItem("reservas") || "[]"
+        );
+
+    const reserva = {
+
+        id: Date.now(),
+
         nombre,
         tipo,
         ciudad,
         precio,
+
         fecha,
+        fechaRegreso,
+
         adultos,
         ninos,
-        obs,
-        fechaCreacion: new Date().toLocaleDateString("es-CO")
-    });
-    localStorage.setItem("reservas", JSON.stringify(reservas));
- 
-    // Resumen
-    const personas = adultos + " adulto(s)" + (ninos > 0 ? `, ${ninos} niño(s)` : "");
-    mostrarToast(`✅ Reserva confirmada: ${nombre} — ${fecha} — ${personas}`);
- 
+
+        metodoPago,
+
+        fechaCreacion:
+            new Date().toLocaleDateString("es-CO")
+    };
+
+    reservas.push(reserva);
+
+    localStorage.setItem(
+        "reservas",
+        JSON.stringify(reservas)
+    );
+
+
+
+    
+
+    // =========================
+    // MENSAJE RESUMEN
+    // =========================
+
+    const personas =
+        adultos + " adulto(s)" +
+        (ninos > 0
+            ? `, ${ninos} niño(s)`
+            : "");
+
+    mostrarToast(
+        `✅ Reserva confirmada: ${nombre} | ${fecha} | ${personas} | Pago: ${metodoPago}`
+    );
+
+    console.log("Reserva guardada:", reserva);
+
     cerrarReserva();
 }
  
@@ -2045,6 +2133,11 @@ function abrirReserva(item, tipo) {
     document.querySelector(".tour-detail-overlay")?.remove();
 
     const modal = document.getElementById("reservaModal");
+
+    const hoy = new Date().toISOString().split("T")[0];
+
+    document.getElementById("reservaFecha").min = hoy;
+    document.getElementById("reservaFechaRegreso").min = hoy;
     
     // Quitar hidden y forzar visibilidad con style directo
     modal.removeAttribute("class");
@@ -2063,8 +2156,6 @@ function abrirReserva(item, tipo) {
     document.getElementById("reservaNombre").value   = item.nombre || "";
     document.getElementById("reservaServicio").value = item.nombre || "";
 
-    const hoy = new Date().toISOString().split("T")[0];
-    const fechaInput = document.getElementById("reservaFecha");
     if (fechaInput) { fechaInput.min = hoy; fechaInput.value = hoy; }
 
     const adultos = document.getElementById("reservaAdultos");
@@ -2082,6 +2173,12 @@ function cerrarReserva() {
     const modal = document.getElementById("reservaModal");
     modal.setAttribute("class", "auth-modal hidden");
     modal.setAttribute("style", "display:none!important;");
+}
+
+function cerrarReserva() {
+    const modal = document.getElementById("reservaModal");
+    modal.classList.add("hidden");
+    modal.style.display = "none";
 }
 
 
@@ -2477,3 +2574,35 @@ function seleccionarTipo(
         tipo
     );
 }
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const fechaIda =
+        document.getElementById("reservaFecha");
+
+    const fechaRegreso =
+        document.getElementById("reservaFechaRegreso");
+
+    if (fechaIda && fechaRegreso) {
+
+        fechaIda.addEventListener("change", () => {
+
+            fechaRegreso.min = fechaIda.value;
+
+            if (
+                fechaRegreso.value &&
+                fechaRegreso.value < fechaIda.value
+            ) {
+
+                fechaRegreso.value = "";
+            }
+
+        });
+
+    }
+
+});
+
+
