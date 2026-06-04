@@ -858,8 +858,25 @@ async def eliminar_transporte(id: int):
     db.close()
     return {"mensaje": "Transporte eliminado"}
 
-
+@app.get("/admin/db")
+async def ver_base_datos():
+    db = SessionLocal()
+    usuarios = db.query(UsuarioDB).all()
+    tours = db.query(TourDB).all()
+    clientes = db.query(ClienteDB).all()
+    reservas = db.query(ReservaDB).all()
+    guias = db.query(GuiaDB).all()
+    db.close()
+    return {
+        "usuarios": [{"id":u.id,"nombres":u.nombres,"correo":u.correo} for u in usuarios],
+        "tours": [{"id":t.id,"nombre":t.nombre,"ciudad":t.ciudad,"precio":t.precio} for t in tours],
+        "clientes": [{"id":c.id,"nombre":c.nombre,"email":c.email} for c in clientes],
+        "reservas": [{"id":r.id,"cliente_id":r.cliente_id,"tour_id":r.tour_id} for r in reservas],
+        "guias": [{"id":g.id,"nombre":g.nombre} for g in guias],
+    }
 # ------------------- RESERVAS -------------------
+
+
 
 @app.get("/reservas", dependencies=[Depends(get_current_user)])
 @log_action
@@ -921,6 +938,9 @@ async def cancelar_reserva(id: int):
 
 
 # ------------------- SEED DATA (solo para demo) -------------------
+
+
+
 
 @app.post("/seed", status_code=201)
 async def seed_data():
@@ -1045,5 +1065,7 @@ async def obtener_imagenes_tour(
     db.close()
 
     return imagenes
+
+    
 
     
