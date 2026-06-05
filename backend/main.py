@@ -1046,4 +1046,26 @@ async def obtener_imagenes_tour(
 
     return imagenes
 
-    
+
+@app.get("/debug/usuarios")
+async def debug_usuarios():
+
+    db = SessionLocal()
+
+    usuarios = db.query(
+        UsuarioDB
+    ).all()
+
+    resultado = []
+
+    for u in usuarios:
+
+        resultado.append({
+            "id": u.id,
+            "nombres": u.nombres,
+            "correo": u.correo
+        })
+
+    db.close()
+
+    return resultado
